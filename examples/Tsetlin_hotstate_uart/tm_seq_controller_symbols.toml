@@ -1,0 +1,88 @@
+[metadata]
+generated_from = "main"
+variable_count = 52
+
+[state_variables]
+"0" = { name = "start_clause", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"1" = { name = "vote_rst", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"2" = { name = "v0_up", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"3" = { name = "v0_dn", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"4" = { name = "v1_up", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"5" = { name = "v1_dn", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"6" = { name = "v2_up", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"7" = { name = "v2_dn", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"8" = { name = "v3_up", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"9" = { name = "v3_dn", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"10" = { name = "v4_up", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"11" = { name = "v4_dn", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"12" = { name = "v5_up", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"13" = { name = "v5_dn", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"14" = { name = "v6_up", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"15" = { name = "v6_dn", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"16" = { name = "v7_up", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"17" = { name = "v7_dn", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"18" = { name = "v8_up", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"19" = { name = "v8_dn", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"20" = { name = "v9_up", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"21" = { name = "v9_dn", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"22" = { name = "done", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"23" = { name = "current_max", type = "output", initial_value = 0, width = 11, is_unsigned = false }
+"34" = { name = "winner_out", type = "output", initial_value = 0, width = 4, is_unsigned = false }
+
+[input_variables]
+"0" = { name = "fire", type = "input", width = 1, start_bit = 0, referenced = false, compacted_start_bit = -1 }
+"1" = { name = "is_pos", type = "input", width = 1, start_bit = 1, referenced = true, compacted_start_bit = 0 }
+"2" = { name = "clause_done", type = "input", width = 1, start_bit = 2, referenced = true, compacted_start_bit = 1 }
+"3" = { name = "clause_strength", type = "input", width = 7, start_bit = 3, referenced = false, compacted_start_bit = -1 }
+"4" = { name = "v_out_0", type = "input", width = 11, start_bit = 10, referenced = false, compacted_start_bit = -1 }
+"5" = { name = "v_out_1", type = "input", width = 11, start_bit = 21, referenced = false, compacted_start_bit = -1 }
+"6" = { name = "v_out_2", type = "input", width = 11, start_bit = 32, referenced = false, compacted_start_bit = -1 }
+"7" = { name = "v_out_3", type = "input", width = 11, start_bit = 43, referenced = false, compacted_start_bit = -1 }
+"8" = { name = "v_out_4", type = "input", width = 11, start_bit = 54, referenced = false, compacted_start_bit = -1 }
+"9" = { name = "v_out_5", type = "input", width = 11, start_bit = 65, referenced = false, compacted_start_bit = -1 }
+"10" = { name = "v_out_6", type = "input", width = 11, start_bit = 76, referenced = false, compacted_start_bit = -1 }
+"11" = { name = "v_out_7", type = "input", width = 11, start_bit = 87, referenced = false, compacted_start_bit = -1 }
+"12" = { name = "v_out_8", type = "input", width = 11, start_bit = 98, referenced = false, compacted_start_bit = -1 }
+"13" = { name = "v_out_9", type = "input", width = 11, start_bit = 109, referenced = false, compacted_start_bit = -1 }
+"14" = { name = "go", type = "input", width = 1, start_bit = 120, referenced = true, compacted_start_bit = 2 }
+"15" = { name = "__cmp_0", type = "input", width = 1, start_bit = 121, referenced = true, compacted_start_bit = 3 }
+"16" = { name = "__cmp_1", type = "input", width = 1, start_bit = 122, referenced = true, compacted_start_bit = 4 }
+"17" = { name = "__cmp_2", type = "input", width = 1, start_bit = 123, referenced = true, compacted_start_bit = 5 }
+"18" = { name = "__cmp_3", type = "input", width = 1, start_bit = 124, referenced = true, compacted_start_bit = 6 }
+"19" = { name = "__cmp_4", type = "input", width = 1, start_bit = 125, referenced = true, compacted_start_bit = 7 }
+"20" = { name = "__cmp_5", type = "input", width = 1, start_bit = 126, referenced = true, compacted_start_bit = 8 }
+"21" = { name = "__cmp_6", type = "input", width = 1, start_bit = 127, referenced = true, compacted_start_bit = 9 }
+"22" = { name = "__cmp_7", type = "input", width = 1, start_bit = 128, referenced = true, compacted_start_bit = 10 }
+"23" = { name = "__cmp_8", type = "input", width = 1, start_bit = 129, referenced = true, compacted_start_bit = 11 }
+"24" = { name = "__cmp_9", type = "input", width = 1, start_bit = 130, referenced = true, compacted_start_bit = 12 }
+
+[switches]
+"0" = { input_var_index = -1 }
+"1" = { input_var_index = -1 }
+
+[external_inputs]
+"0" = { name = "class_idx", type = "external_input", width = 4 }
+
+[expressions]
+"1" = { expr = "v_out_0", result_width = 11, state_lo = 23, state_hi = 33 }
+"2" = { expr = "v_out_1", result_width = 11, state_lo = 23, state_hi = 33 }
+"3" = { expr = "v_out_2", result_width = 11, state_lo = 23, state_hi = 33 }
+"4" = { expr = "v_out_3", result_width = 11, state_lo = 23, state_hi = 33 }
+"5" = { expr = "v_out_4", result_width = 11, state_lo = 23, state_hi = 33 }
+"6" = { expr = "v_out_5", result_width = 11, state_lo = 23, state_hi = 33 }
+"7" = { expr = "v_out_6", result_width = 11, state_lo = 23, state_hi = 33 }
+"8" = { expr = "v_out_7", result_width = 11, state_lo = 23, state_hi = 33 }
+"9" = { expr = "v_out_8", result_width = 11, state_lo = 23, state_hi = 33 }
+"10" = { expr = "v_out_9", result_width = 11, state_lo = 23, state_hi = 33 }
+
+[comparators]
+"0" = { op = ">=", lhs = "clause_strength", lhs_width = 7, lhs_is_state = false, rhs_value = 5, unsigned_cmp = false, bypass_varsel_id = -1 }
+"1" = { op = ">", lhs = "v_out_1", lhs_width = 11, lhs_is_state = false, rhs = "current_max", rhs_width = 11, rhs_is_state = true, unsigned_cmp = false, bypass_varsel_id = -1 }
+"2" = { op = ">", lhs = "v_out_2", lhs_width = 11, lhs_is_state = false, rhs = "current_max", rhs_width = 11, rhs_is_state = true, unsigned_cmp = false, bypass_varsel_id = -1 }
+"3" = { op = ">", lhs = "v_out_3", lhs_width = 11, lhs_is_state = false, rhs = "current_max", rhs_width = 11, rhs_is_state = true, unsigned_cmp = false, bypass_varsel_id = -1 }
+"4" = { op = ">", lhs = "v_out_4", lhs_width = 11, lhs_is_state = false, rhs = "current_max", rhs_width = 11, rhs_is_state = true, unsigned_cmp = false, bypass_varsel_id = -1 }
+"5" = { op = ">", lhs = "v_out_5", lhs_width = 11, lhs_is_state = false, rhs = "current_max", rhs_width = 11, rhs_is_state = true, unsigned_cmp = false, bypass_varsel_id = -1 }
+"6" = { op = ">", lhs = "v_out_6", lhs_width = 11, lhs_is_state = false, rhs = "current_max", rhs_width = 11, rhs_is_state = true, unsigned_cmp = false, bypass_varsel_id = -1 }
+"7" = { op = ">", lhs = "v_out_7", lhs_width = 11, lhs_is_state = false, rhs = "current_max", rhs_width = 11, rhs_is_state = true, unsigned_cmp = false, bypass_varsel_id = -1 }
+"8" = { op = ">", lhs = "v_out_8", lhs_width = 11, lhs_is_state = false, rhs = "current_max", rhs_width = 11, rhs_is_state = true, unsigned_cmp = false, bypass_varsel_id = -1 }
+"9" = { op = ">", lhs = "v_out_9", lhs_width = 11, lhs_is_state = false, rhs = "current_max", rhs_width = 11, rhs_is_state = true, unsigned_cmp = false, bypass_varsel_id = -1 }

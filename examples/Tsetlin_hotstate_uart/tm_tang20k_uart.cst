@@ -1,0 +1,29 @@
+// tm_tang20k_uart.cst
+// Pin constraints for Tsetlin_hotstate_uart on Sipeed Tang Nano 20K.
+// clk/rst_n/uart_txd/uart_rxd match examples/webserver's webserver_tang20k.cst
+// exactly -- the pins that example verified end to end on this board -- the
+// same way tm_tang9k_uart.cst was derived from its 9K counterpart.
+//
+// NOTE rst_n: pin 19 follows webserver_tang20k.cst, but boards/tang_nano_20k.json
+// (cited to the schematic) says KEY_S1 is pin 88 and lists 19 as an LED pin.
+// Kept consistent with the working example rather than "fixed" here; the design
+// only needs rst_n to idle high. See that example's README.
+
+// Clock (27 MHz on-board oscillator)
+IO_LOC "clk" 4;
+IO_PORT "clk" PULL_UP=NONE IO_TYPE=LVCMOS33;
+
+// Reset (active-low)
+IO_LOC "rst_n" 19;
+IO_PORT "rst_n" PULL_UP=UP IO_TYPE=LVCMOS33;
+
+// UART (USB serial bridge)
+IO_LOC "uart_txd" 69;
+IO_PORT "uart_txd" IO_TYPE=LVCMOS33;
+
+IO_LOC "uart_rxd" 70;
+IO_PORT "uart_rxd" PULL_UP=UP IO_TYPE=LVCMOS33;
+
+// Status LED (active-HIGH on Tang Nano 20K, unlike the 9K's active-low LEDs)
+IO_LOC "done_led" 15;
+IO_PORT "done_led" IO_TYPE=LVCMOS33;

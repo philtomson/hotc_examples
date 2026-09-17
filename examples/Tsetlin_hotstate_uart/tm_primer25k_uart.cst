@@ -1,0 +1,28 @@
+// tm_primer25k_uart.cst — Sipeed Tang Primer 25K (Gowin GW5A-25)
+//
+// Pins from the vendored dock schematic (boards/Tang/Primer-25K/
+// Tang_25K_60033.pdf) and boards/tang_primer_25k.json, hardware-verified
+// 2026-09-09 during the examples/webserver port to this board:
+//   E2  50 MHz oscillator      B3  FPGA_UART_RX      C3  FPGA_UART_TX
+//   H11 user button S1 (rst_n)
+//
+// done_led goes to a spare expansion-header pin: this dock has NO user LEDs on
+// general FPGA IO (its LED1/3/4/5 sit in the power section and on the
+// E8_READY/D7_DONE config rails). The design's real output is the result byte
+// on UART TX, which is what send_image.py reads -- the LED is only an idle
+// indicator, so nothing observable is lost.
+
+IO_LOC  "clk" E2;
+IO_PORT "clk" IO_TYPE=LVCMOS33;
+
+IO_LOC  "rst_n" H11;
+IO_PORT "rst_n" IO_TYPE=LVCMOS33 PULL_MODE=UP;
+
+IO_LOC  "uart_rxd" B3;
+IO_PORT "uart_rxd" IO_TYPE=LVCMOS33 PULL_MODE=UP;
+
+IO_LOC  "uart_txd" C3;
+IO_PORT "uart_txd" IO_TYPE=LVCMOS33 DRIVE=8;
+
+IO_LOC  "done_led" H8;
+IO_PORT "done_led" IO_TYPE=LVCMOS33 DRIVE=8;

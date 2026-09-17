@@ -1,0 +1,28 @@
+[metadata]
+generated_from = "step"
+variable_count = 13
+
+[state_variables]
+"0" = { name = "go", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"1" = { name = "img_waddr", type = "output", initial_value = 0, width = 7, is_unsigned = false }
+"8" = { name = "img_wdata", type = "output", initial_value = 0, width = 8, is_unsigned = false }
+"16" = { name = "img_wen", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"17" = { name = "tx_start", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"18" = { name = "tx_data", type = "output", initial_value = 0, width = 8, is_unsigned = false }
+
+[input_variables]
+"0" = { name = "rx_done", type = "input", width = 1, start_bit = 0, referenced = true, compacted_start_bit = 0 }
+"1" = { name = "rx_byte", type = "input", width = 8, start_bit = 1, referenced = false, compacted_start_bit = -1 }
+"2" = { name = "done", type = "input", width = 1, start_bit = 9, referenced = true, compacted_start_bit = 1 }
+"3" = { name = "winner", type = "input", width = 4, start_bit = 10, referenced = true, compacted_start_bit = 2 }
+"4" = { name = "tx_busy", type = "input", width = 1, start_bit = 14, referenced = true, compacted_start_bit = 6 }
+"5" = { name = "byte_idx", type = "input", width = 8, start_bit = 15, referenced = false, compacted_start_bit = -1, timer_index = 0 }
+
+[switches]
+
+[external_inputs]
+
+[expressions]
+"1" = { expr = "((97) - byte_idx)", result_width = 7, state_lo = 1, state_hi = 7 }
+"2" = { expr = "rx_byte", result_width = 8, state_lo = 8, state_hi = 15 }
+"3" = { expr = "winner", result_width = 8, state_lo = 18, state_hi = 25 }

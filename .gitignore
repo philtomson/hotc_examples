@@ -1,0 +1,19 @@
+# Per-machine tool overrides (see tools.mk)
+local.mk
+
+# Local synthesis/PnR build outputs (each example's Makefile.synth_* rebuilds
+# these; keep only the curated verified_bitstreams/ under version control)
+*.fs
+!**/verified_bitstreams/*.fs
+synth_*.json
+synth_*.log
+pnr_*.json
+*.jed
+
+# Verilator sim build output
+obj_dir/
+*.vcd
+
+# Editor/OS cruft
+.DS_Store
+*.swp

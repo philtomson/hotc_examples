@@ -1,0 +1,89 @@
+# Makefile.synth_tang9k — Tang Nano 9K (Gowin GW1NR-LV9QN88PC6/I5) synthesis
+# for Tsetlin_hotstate_uart (UART image load/result instead of SPI).
+#
+# Toolchain:
+#   Synthesis:  Yosys  synth_gowin
+#   PnR:        nextpnr-himbaechel  (Gowin Himbaechel backend)
+#   Pack:       gowin_pack  (produces .fs bitstream)
+#   Program:    openFPGALoader  (Tang Nano 9K board preset)
+#
+# Full flow:  make -f Makefile.synth_tang9k prog
+#
+# Resources: same tm_core_v2.v/tm_top.v as examples/Tsetlin_hotstate (21/26
+# BSRAM, ~80%, tight -- see that example's README), plus two small UART
+# hotstate machines and one loader hotstate machine in place of
+# spi_deserializer.v -- expect LUT/DFF usage to be similar or slightly
+# higher, BSRAM unchanged (still dominated by the 200-clause mask ROMs).
+#
+# The *_template.v/*.mem/*.vh files below are hotc's OUTPUT, checked in
+# as-is -- this repo doesn't ship the hotc compiler itself, so there is no
+# `generate` step. If you're not modifying the design, `make prog` (or
+# `verify`, where available) just builds and flashes what's here.
+
+IP_DIR    = ../../IP
+
+-include ../../tools.mk
+-include ../../local.mk
+
+# ── Gowin device parameters ───────────────────────────────────────────────
+GOWIN_DEVICE = GW1NR-LV9QN88PC6/I5
+GOWIN_FAMILY = GW1N-9C
+TOP          = tm_hw_top_uart
+CST          = tm_tang9k_uart.cst
+
+# ── Pre-generated hotc controller output (checked in, not rebuilt here) ───
+HOTC_TEMPLATES = tm_seq_controller_template.v tm_uart_loader_template.v \
+                 uart_tx_template.v uart_rx_template.v
+
+# ── Design sources (same tm_core_v2.v/tm_top.v as examples/Tsetlin_hotstate) ─
+SRCS = tm_hw_top_uart.v \
+       tm_top.v \
+       tm_core_v2.v \
+       $(HOTC_TEMPLATES) \
+       $(IP_DIR)/hotstate.sv \
+       $(IP_DIR)/microcode.sv \
+       $(IP_DIR)/control.sv \
+       $(IP_DIR)/next_address.sv \
+       $(IP_DIR)/timer.sv \
+       $(IP_DIR)/variable.sv \
+       $(IP_DIR)/switch.sv \
+       $(IP_DIR)/stack.sv
+
+.PHONY: synth pnr pack prog clean_synth
+
+# ── Synthesis ────────────────────────────────────────────────────────────
+synth:
+	@echo "=== Yosys Gowin synthesis for $(TOP) (Tang Nano 9K) ==="
+	$(YOSYS) -ql synth_tang9k.log -p " \
+	  read_verilog -sv $(SRCS); \
+	  hierarchy -check -top $(TOP); \
+	  synth_gowin -top $(TOP) -json synth_tang9k.json; \
+	  stat"
+	@echo "=== Gowin 9K synthesis done — see synth_tang9k.log ==="
+
+# ── Place and route ──────────────────────────────────────────────────────
+pnr: synth
+	@echo "=== nextpnr-himbaechel Gowin 9K place and route ==="
+	$(NEXTPNR_HIMB) \
+	    --device $(GOWIN_DEVICE) \
+	    -o family=$(GOWIN_FAMILY) \
+	    --json synth_tang9k.json \
+	    -o cst=$(CST) \
+	    --write pnr_tang9k.json
+	@echo "=== Gowin 9K P&R done — see pnr_tang9k.json ==="
+
+# ── Pack bitstream ───────────────────────────────────────────────────────
+pack: pnr
+	@echo "=== gowin_pack: creating 9K bitstream ==="
+	$(GOWIN_PACK) -d $(GOWIN_FAMILY) -o design_tang9k.fs pnr_tang9k.json
+	@echo "=== Bitstream: design_tang9k.fs ==="
+
+# ── Program ───────────────────────────────────────────────────────────────
+prog: pack
+	@echo "=== openFPGALoader: programming Tang Nano 9K ==="
+	$(OPENFPGALOADER) -b tangnano9k design_tang9k.fs
+	@echo "=== Programming done ==="
+
+# ── Clean ─────────────────────────────────────────────────────────────────
+clean_synth:
+	rm -f synth_tang9k.json synth_tang9k.log pnr_tang9k.json design_tang9k.fs
