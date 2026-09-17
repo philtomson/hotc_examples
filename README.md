@@ -145,15 +145,18 @@ renamed upstream.
 
 This repository is under two licenses, split by directory:
 
-- **Everything except `IP/`** (examples, `docs/`, `tools.mk`, host scripts)
+- **Everything else** (other examples, `docs/`, `tools.mk`, host scripts)
   is [MIT](LICENSE.md) — use, modify, and redistribute freely, including
   commercially.
-- **`IP/`** (the hotstate engine itself — `hotstate.sv`, `microcode.sv`,
-  `control.sv`, `next_address.sv`, `timer.sv`, `variable.sv`, `switch.sv`,
-  `stack.sv`) is [CC BY-NC-ND 4.0](IP/LICENSE.md) — noncommercial use only,
-  no derivative/modified redistribution. Every example depends on `IP/` to
-  build and run, so building and running an example is fine; redistributing
-  a modified version of the engine, or using it commercially, is not.
+- **[`IP/`](IP/LICENSE.md)** (the hotstate engine itself — `hotstate.sv`,
+  `microcode.sv`, `control.sv`, `next_address.sv`, `timer.sv`, `variable.sv`,
+  `switch.sv`, `stack.sv`) and **[`examples/Tsetlin_hotstate_uart/`](examples/Tsetlin_hotstate_uart/LICENSE.md)**
+  are each CC BY-NC-ND 4.0 — noncommercial use only, no derivative/modified
+  redistribution. Every example depends on `IP/` to build and run, so
+  building and running an example is fine; redistributing a modified
+  version of the engine (or of Tsetlin_hotstate_uart), or using either
+  commercially, is not.
 
-If you're unsure which applies to a given file, check which side of `IP/`
-it's on — each directory's own `LICENSE.md` is the authoritative text.
+If you're unsure which applies to a given file, check which directory it's
+in — each CC-BY-NC-ND directory's own `LICENSE.md` is the authoritative
+text (`IP/LICENSE.md`, `examples/Tsetlin_hotstate_uart/LICENSE.md`).

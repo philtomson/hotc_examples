@@ -1,5 +1,10 @@
 # Tsetlin Machine FPGA Inference Accelerator — UART variant
 
+> **License note:** this directory is licensed under CC BY-NC-ND 4.0
+> (noncommercial, no derivative redistribution) — see `LICENSE.md` in this
+> directory. Most of the rest of this repository is MIT; see the root
+> `README.md`'s "License" section for the split.
+
 A 200-clause Tsetlin Machine MNIST digit classifier, running entirely on
 the hotstate engine (see the [repo-level README](../../README.md) for what
 that is), with a plain UART front-end — no extra hardware beyond a Tang

@@ -2,10 +2,13 @@ MIT License
 
 Copyright (c) 2026 Steve Casselman and Phil Tomson
 
-This license applies to this repository EXCEPT the `IP/` directory (the
-hotstate engine SystemVerilog), which is licensed separately under
-CC BY-NC-ND 4.0 — see `IP/LICENSE.md` and the "License" section of this
-repository's top-level `README.md` for details.
+This license applies to this repository EXCEPT the following directories,
+each licensed separately under CC BY-NC-ND 4.0 (see their own `LICENSE.md`,
+and the "License" section of this repository's top-level `README.md`, for
+details):
+
+- `IP/` (the hotstate engine SystemVerilog)
+- `examples/Tsetlin_hotstate_uart/`
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
