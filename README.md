@@ -1,11 +1,11 @@
 # hotc examples
 
-Real, hardware-verified example designs built with **hotc**, a C-to-FPGA
+Hardware-verified example designs built with **hotc**, a C-to-FPGA
 compiler that targets a small microcoded control engine called
 **hotstate** — plus the hand-written Verilog, board constraints, and host
 tooling each example needs to actually build and run.
 
-`hotc` itself isn't open source yet. What's here is its *output*: the
+The `hotc` compiler itself isn't currently open source. What's here is its *output*: the
 generated Verilog and microcode `.mem` files for each example, the
 hotstate engine those files run on (`IP/`), and everything else (hand-
 written top-level wiring, board constraints, host-side test/demo scripts)
@@ -20,7 +20,8 @@ subset of these — check the example's own README.
 
 ## What is hotstate?
 
-hotstate is a **single-cycle microcoded state machine**: it executes one
+hotstate is a **single-cycle microcoded state machine** 
+(see: https://hotwright.com/ for more details): it executes one
 instruction per clock cycle to drive a control-dominated design (an FSM,
 a protocol engine, a sequencer) plus whatever narrow datapath logic hangs
 off it. `hotc` compiles a restricted, hardware-mappable subset of C
