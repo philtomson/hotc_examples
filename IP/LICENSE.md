@@ -1,4 +1,4 @@
-Copyright (c) 2026 Phil Tomson and Steve Casselman
+Copyright (c) 2026 Steve Casselman and Phil Tomson
 
 This license applies to the contents of this directory (`IP/` — the
 hotstate engine SystemVerilog: `hotstate.sv`, `microcode.sv`, `control.sv`,

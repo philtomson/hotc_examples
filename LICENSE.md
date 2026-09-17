@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2026 Phil Tomson and Steve Casselman
+Copyright (c) 2026 Steve Casselman and Phil Tomson
 
 This license applies to this repository EXCEPT the `IP/` directory (the
 hotstate engine SystemVerilog), which is licensed separately under
