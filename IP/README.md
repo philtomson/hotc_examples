@@ -1,5 +1,10 @@
 # HotState Machine Documentation
 
+> **License note:** this directory is licensed under CC BY-NC-ND 4.0
+> (noncommercial, no derivative redistribution) — see `LICENSE.md` in this
+> directory. The rest of this repository is MIT; see the root `README.md`'s
+> "License" section for the split.
+
 ## Overview
 
 The hotstate is a **single-cycle algorithmic state machine** designed for control of data flow graphs. It executes one microcode instruction per clock cycle to orchestrate computation, making it highly efficient for embedded control applications.
