@@ -1,0 +1,151 @@
+[metadata]
+generated_from = "init_display"
+variable_count = 54
+
+[state_variables]
+"0" = { name = "pixel_color", type = "output", initial_value = 0, width = 16, is_unsigned = false }
+"16" = { name = "blit_x", type = "output", initial_value = 0, width = 9, is_unsigned = false }
+"25" = { name = "blit_y", type = "output", initial_value = 0, width = 9, is_unsigned = false }
+"34" = { name = "r", type = "output", initial_value = 0, width = 6, is_unsigned = true }
+"40" = { name = "c", type = "output", initial_value = 0, width = 6, is_unsigned = true }
+"46" = { name = "base", type = "output", initial_value = 0, width = 10, is_unsigned = true }
+"56" = { name = "ni", type = "output", initial_value = 0, width = 10, is_unsigned = true }
+"66" = { name = "nr", type = "output", initial_value = 0, width = 7, is_unsigned = false }
+"73" = { name = "nc", type = "output", initial_value = 0, width = 7, is_unsigned = false }
+"80" = { name = "self", type = "output", initial_value = 0, width = 4, is_unsigned = true }
+"84" = { name = "sum", type = "output", initial_value = 0, width = 4, is_unsigned = true }
+"88" = { name = "nb", type = "output", initial_value = 0, width = 4, is_unsigned = true }
+"92" = { name = "neigh", type = "output", initial_value = 0, width = 4, is_unsigned = true }
+"96" = { name = "flip", type = "output", initial_value = 1, width = 1, is_unsigned = false }
+"97" = { name = "cell_wr_val", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"98" = { name = "btn_prev", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"99" = { name = "seed_mode", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"100" = { name = "sclk", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"101" = { name = "mosi", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"102" = { name = "cs_n", type = "output", initial_value = 1, width = 1, is_unsigned = false }
+"103" = { name = "dc", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"104" = { name = "lcd_resetn", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"105" = { name = "spi_byte", type = "output", initial_value = 0, width = 8, is_unsigned = false }
+"113" = { name = "spi_dc", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"114" = { name = "win_x1", type = "output", initial_value = 0, width = 10, is_unsigned = false }
+"124" = { name = "win_x2", type = "output", initial_value = 0, width = 10, is_unsigned = false }
+"134" = { name = "win_y1", type = "output", initial_value = 0, width = 9, is_unsigned = false }
+"143" = { name = "win_y2", type = "output", initial_value = 0, width = 9, is_unsigned = false }
+"152" = { name = "px_cnt", type = "output", initial_value = 0, width = 16, is_unsigned = false }
+"168" = { name = "entry", type = "output", initial_value = 0, width = 10, is_unsigned = false }
+"178" = { name = "c_start", type = "output", initial_value = 0, width = 10, is_unsigned = false }
+"188" = { name = "c_end", type = "output", initial_value = 0, width = 10, is_unsigned = false }
+"198" = { name = "r_start", type = "output", initial_value = 0, width = 9, is_unsigned = false }
+"207" = { name = "r_end", type = "output", initial_value = 0, width = 9, is_unsigned = false }
+"216" = { name = "num_pixels", type = "output", initial_value = 0, width = 16, is_unsigned = false }
+"232" = { name = "grid0__wr_en", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"233" = { name = "grid1__wr_en", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"234" = { name = "sR__wr_en", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"235" = { name = "sC__wr_en", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+
+[input_variables]
+"0" = { name = "mode_btn", type = "input", width = 1, start_bit = 0, referenced = true, compacted_start_bit = 0 }
+"1" = { name = "btn_prev", type = "input", width = 1, start_bit = 1, is_reg = true, referenced = true, compacted_start_bit = 1 }
+"2" = { name = "seed_mode", type = "input", width = 1, start_bit = 2, is_reg = true, referenced = true, compacted_start_bit = 2 }
+"3" = { name = "flip", type = "input", width = 1, start_bit = 3, is_reg = true, referenced = true, compacted_start_bit = 3 }
+"4" = { name = "__cmp_0", type = "input", width = 1, start_bit = 4, referenced = true, compacted_start_bit = 4 }
+"5" = { name = "__cmp_1", type = "input", width = 1, start_bit = 5, referenced = true, compacted_start_bit = 5 }
+"6" = { name = "__cmp_2", type = "input", width = 1, start_bit = 6, referenced = true, compacted_start_bit = 6 }
+"7" = { name = "__cmp_3", type = "input", width = 1, start_bit = 7, referenced = true, compacted_start_bit = 7 }
+"8" = { name = "__cmp_4", type = "input", width = 1, start_bit = 8, referenced = true, compacted_start_bit = 8 }
+"9" = { name = "__cmp_5", type = "input", width = 1, start_bit = 9, referenced = true, compacted_start_bit = 9 }
+"10" = { name = "__cmp_6", type = "input", width = 1, start_bit = 10, referenced = true, compacted_start_bit = 10 }
+"11" = { name = "__cmp_7", type = "input", width = 1, start_bit = 11, referenced = true, compacted_start_bit = 11 }
+"12" = { name = "cmd_idx", type = "input", width = 8, start_bit = 12, referenced = false, compacted_start_bit = -1, timer_index = 1 }
+
+[switches]
+
+[external_inputs]
+
+[expressions]
+"1" = { expr = "!(seed_mode)", result_width = 1, state_lo = 99, state_hi = 99 }
+"2" = { expr = "(((r) + (1)) & 63)", result_width = 6, state_lo = 34, state_hi = 39 }
+"3" = { expr = "(((c) + (1)) & 63)", result_width = 6, state_lo = 40, state_hi = 45 }
+"4" = { expr = "((((((r) * (32)) & 1023)) + (c)) & 1023)", result_width = 10, state_lo = 46, state_hi = 55 }
+"5" = { expr = "seed_single[base]", result_width = 1, state_lo = 97, state_hi = 97 }
+"6" = { expr = "seed_multi[base]", result_width = 1, state_lo = 97, state_hi = 97 }
+"7" = { expr = "mode_btn", result_width = 1, state_lo = 98, state_hi = 98 }
+"8" = { expr = "grid0[base]", result_width = 4, state_lo = 80, state_hi = 83 }
+"9" = { expr = "self", result_width = 4, state_lo = 84, state_hi = 87 }
+"10" = { expr = "(((r) + (-1)) & 127)", result_width = 7, state_lo = 66, state_hi = 72 }
+"11" = { expr = "(((signed(nr, 7)) + (32)) & 127)", result_width = 7, state_lo = 66, state_hi = 72 }
+"12" = { expr = "(((signed(nr, 7)) - (32)) & 127)", result_width = 7, state_lo = 66, state_hi = 72 }
+"13" = { expr = "(((c) + (-1)) & 127)", result_width = 7, state_lo = 73, state_hi = 79 }
+"14" = { expr = "(((signed(nc, 7)) + (32)) & 127)", result_width = 7, state_lo = 73, state_hi = 79 }
+"15" = { expr = "(((signed(nc, 7)) - (32)) & 127)", result_width = 7, state_lo = 73, state_hi = 79 }
+"16" = { expr = "((((((signed(nr, 7)) * (32)) & 1023)) + (signed(nc, 7))) & 1023)", result_width = 10, state_lo = 56, state_hi = 65 }
+"17" = { expr = "grid0[ni]", result_width = 4, state_lo = 88, state_hi = 91 }
+"18" = { expr = "(((sum) + (nb)) & 15)", result_width = 4, state_lo = 84, state_hi = 87 }
+"19" = { expr = "(((c) + (0)) & 127)", result_width = 7, state_lo = 73, state_hi = 79 }
+"20" = { expr = "(((c) + (1)) & 127)", result_width = 7, state_lo = 73, state_hi = 79 }
+"21" = { expr = "(((r) + (0)) & 127)", result_width = 7, state_lo = 66, state_hi = 72 }
+"22" = { expr = "(((r) + (1)) & 127)", result_width = 7, state_lo = 66, state_hi = 72 }
+"23" = { expr = "(((sum) - (self)) & 15)", result_width = 4, state_lo = 92, state_hi = 95 }
+"24" = { expr = "rule[(self) * 9 + (neigh)]", result_width = 1, state_lo = 97, state_hi = 97 }
+"25" = { expr = "grid1[base]", result_width = 4, state_lo = 88, state_hi = 91 }
+"26" = { expr = "(((((((((240) - ((((32) * (4)) & 511))) & 511)) / (2)) & 511)) + ((((c) * (4)) & 511))) & 511)", result_width = 9, state_lo = 16, state_hi = 24 }
+"27" = { expr = "(((((((((135) - ((((32) * (4)) & 511))) & 511)) / (2)) & 511)) + ((((r) * (4)) & 511))) & 511)", result_width = 9, state_lo = 25, state_hi = 33 }
+"28" = { expr = "(nb) ? (2016) : (15)", result_width = 16, state_lo = 0, state_hi = 15 }
+"29" = { expr = "grid1[base]", result_width = 4, state_lo = 80, state_hi = 83 }
+"30" = { expr = "grid1[ni]", result_width = 4, state_lo = 88, state_hi = 91 }
+"31" = { expr = "grid0[base]", result_width = 4, state_lo = 88, state_hi = 91 }
+"32" = { expr = "!(flip)", result_width = 1, state_lo = 96, state_hi = 96 }
+"33" = { expr = "spi_dc", result_width = 1, state_lo = 103, state_hi = 103 }
+"34" = { expr = "spi_byte[7]", result_width = 1, state_lo = 101, state_hi = 101 }
+"35" = { expr = "spi_byte[6]", result_width = 1, state_lo = 101, state_hi = 101 }
+"36" = { expr = "spi_byte[5]", result_width = 1, state_lo = 101, state_hi = 101 }
+"37" = { expr = "spi_byte[4]", result_width = 1, state_lo = 101, state_hi = 101 }
+"38" = { expr = "spi_byte[3]", result_width = 1, state_lo = 101, state_hi = 101 }
+"39" = { expr = "spi_byte[2]", result_width = 1, state_lo = 101, state_hi = 101 }
+"40" = { expr = "spi_byte[1]", result_width = 1, state_lo = 101, state_hi = 101 }
+"41" = { expr = "spi_byte[0]", result_width = 1, state_lo = 101, state_hi = 101 }
+"42" = { expr = "(((signed(win_x1, 10)) + (40)) & 1023)", result_width = 10, state_lo = 178, state_hi = 187 }
+"43" = { expr = "(((signed(win_x2, 10)) + (40)) & 1023)", result_width = 10, state_lo = 188, state_hi = 197 }
+"44" = { expr = "(((signed(win_y1, 9)) + (53)) & 511)", result_width = 9, state_lo = 198, state_hi = 206 }
+"45" = { expr = "(((signed(win_y2, 9)) + (53)) & 511)", result_width = 9, state_lo = 207, state_hi = 215 }
+"46" = { expr = "((sshr(signed(signed(c_start, 10), 8), 8)) & 255)", result_width = 8, state_lo = 105, state_hi = 112 }
+"47" = { expr = "(((signed(c_start, 10)) & (255)) & 255)", result_width = 8, state_lo = 105, state_hi = 112 }
+"48" = { expr = "((sshr(signed(signed(c_end, 10), 8), 8)) & 255)", result_width = 8, state_lo = 105, state_hi = 112 }
+"49" = { expr = "(((signed(c_end, 10)) & (255)) & 255)", result_width = 8, state_lo = 105, state_hi = 112 }
+"50" = { expr = "((sshr(signed(signed(r_start, 9), 8), 8)) & 255)", result_width = 8, state_lo = 105, state_hi = 112 }
+"51" = { expr = "(((signed(r_start, 9)) & (255)) & 255)", result_width = 8, state_lo = 105, state_hi = 112 }
+"52" = { expr = "((sshr(signed(signed(r_end, 9), 8), 8)) & 255)", result_width = 8, state_lo = 105, state_hi = 112 }
+"53" = { expr = "(((signed(r_end, 9)) & (255)) & 255)", result_width = 8, state_lo = 105, state_hi = 112 }
+"54" = { expr = "(((((((((signed(win_x2, 10)) - (signed(win_x1, 10))) & 65535)) + (1)) & 65535)) * (((((((signed(win_y2, 9)) - (signed(win_y1, 9))) & 65535)) + (1)) & 65535))) & 65535)", result_width = 16, state_lo = 216, state_hi = 231 }
+"55" = { expr = "(((signed(px_cnt, 16)) + (1)) & 65535)", result_width = 16, state_lo = 152, state_hi = 167 }
+"56" = { expr = "((sshr(signed(signed(pixel_color, 16), 8), 8)) & 255)", result_width = 8, state_lo = 105, state_hi = 112 }
+"57" = { expr = "(((signed(pixel_color, 16)) & (255)) & 255)", result_width = 8, state_lo = 105, state_hi = 112 }
+"58" = { expr = "blit_x", result_width = 10, state_lo = 114, state_hi = 123 }
+"59" = { expr = "(((signed(blit_x, 9)) + (3)) & 1023)", result_width = 10, state_lo = 124, state_hi = 133 }
+"60" = { expr = "blit_y", result_width = 9, state_lo = 134, state_hi = 142 }
+"61" = { expr = "(((signed(blit_y, 9)) + (3)) & 511)", result_width = 9, state_lo = 143, state_hi = 151 }
+"62" = { expr = "init_cmd[((69) - cmd_idx)]", result_width = 10, state_lo = 168, state_hi = 177 }
+"63" = { expr = "(((((sshr(signed(entry, 10), 8)) & 1)) & (1)) & 1)", result_width = 1, state_lo = 113, state_hi = 113 }
+"64" = { expr = "(((signed(entry, 10)) & (255)) & 255)", result_width = 8, state_lo = 105, state_hi = 112 }
+
+[const_arrays]
+"rule" = { width = 1, depth = 18, data = [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0] }
+"seed_single" = { width = 1, depth = 1024, data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+"seed_multi" = { width = 1, depth = 1024, data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+"init_cmd" = { width = 10, depth = 70, data = [54, 368, 58, 261, 178, 268, 268, 256, 307, 307, 183, 309, 187, 281, 192, 300, 194, 257, 195, 274, 196, 288, 198, 271, 208, 420, 417, 224, 464, 260, 269, 273, 275, 299, 319, 340, 332, 280, 269, 267, 287, 291, 225, 464, 260, 268, 273, 275, 300, 319, 324, 337, 303, 287, 287, 288, 291, 33, 41, 42, 256, 296, 257, 279, 43, 256, 309, 256, 443, 44] }
+
+[writable_arrays]
+"grid0" = { element_width = 1, depth = 1024, wr_en_state_bit = 232, wr_addr_state_lo = 46, wr_addr_state_hi = 55, wr_data_state_lo = 97, wr_data_state_hi = 97, wr_addr_expr = "base", wr_data_expr = "cell_wr_val", data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+"grid1" = { element_width = 1, depth = 1024, wr_en_state_bit = 233, wr_addr_state_lo = 46, wr_addr_state_hi = 55, wr_data_state_lo = 97, wr_data_state_hi = 97, wr_addr_expr = "base", wr_data_expr = "cell_wr_val", data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+"sR" = { element_width = 1, depth = 32, wr_en_state_bit = 234, wr_addr_state_lo = 34, wr_addr_state_hi = 39, wr_data_state_lo = -1, wr_data_state_hi = -1, wr_addr_expr = "r", wr_data_expr = "0", data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+"sC" = { element_width = 1, depth = 32, wr_en_state_bit = 235, wr_addr_state_lo = 40, wr_addr_state_hi = 45, wr_data_state_lo = -1, wr_data_state_hi = -1, wr_addr_expr = "c", wr_data_expr = "0", data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+
+[comparators]
+"0" = { op = "<", lhs = "r", lhs_width = 6, lhs_is_state = true, rhs_value = 32, unsigned_cmp = true, bypass_varsel_id = -1 }
+"1" = { op = "<", lhs = "c", lhs_width = 6, lhs_is_state = true, rhs_value = 32, unsigned_cmp = true, bypass_varsel_id = -1 }
+"2" = { op = "<", lhs = "nr", lhs_width = 7, lhs_is_state = true, rhs_value = 0, unsigned_cmp = false, bypass_varsel_id = -1 }
+"3" = { op = ">=", lhs = "nr", lhs_width = 7, lhs_is_state = true, rhs_value = 32, unsigned_cmp = false, bypass_varsel_id = -1 }
+"4" = { op = "<", lhs = "nc", lhs_width = 7, lhs_is_state = true, rhs_value = 0, unsigned_cmp = false, bypass_varsel_id = -1 }
+"5" = { op = ">=", lhs = "nc", lhs_width = 7, lhs_is_state = true, rhs_value = 32, unsigned_cmp = false, bypass_varsel_id = -1 }
+"6" = { op = "!=", lhs = "self", lhs_width = 4, lhs_is_state = true, rhs = "nb", rhs_width = 4, rhs_is_state = true, unsigned_cmp = true, bypass_varsel_id = -1 }
+"7" = { op = "<", lhs = "px_cnt", lhs_width = 16, lhs_is_state = true, rhs = "num_pixels", rhs_width = 16, rhs_is_state = true, unsigned_cmp = false, bypass_varsel_id = -1 }

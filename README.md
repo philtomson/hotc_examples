@@ -63,6 +63,7 @@ IP/                          hotstate engine (shared by every example)
 docs/hotc_programming.md     hotc C-subset language reference
 examples/
   Tsetlin_hotstate_uart/     Tsetlin Machine MNIST classifier over UART
+  gol-hotstate/              Conway's Game of Life, rendered to an SPI LCD
   webserver/                 (coming next)
 tools.mk                     shared synthesis tool-path overrides
 ```
@@ -133,4 +134,9 @@ renamed upstream.
   Verified 100/100 against 100 real labeled MNIST samples on Tang Nano 9K
   real hardware. Includes `draw_digit_uart.py`, an interactive GUI to draw
   a digit and classify it live.
+- **[`gol-hotstate`](examples/gol-hotstate/)** — Conway's Game of Life
+  (B3/S23), running entirely as compiled hotstate microcode, rendered live
+  to a 1.14" ST7789 SPI LCD. A physical button toggles between two seed
+  patterns. Tang Nano 9K only (needs the SPI LCD). Verified against a
+  canonical B3/S23 software oracle and flashed to real hardware.
 - **`webserver`** — coming next.

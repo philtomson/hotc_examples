@@ -1,0 +1,32 @@
+// lcd114.cst — Physical pin constraints for Tang Nano 9K + Sipeed 1.14" SPI LCD board
+//
+// Board schematic reference: Sipeed Tang Nano 9K example design (spi_lcd)
+
+IO_LOC "clk" 52;
+IO_PORT "clk" IO_TYPE=LVCMOS33 PULL_MODE=NONE;
+
+IO_LOC "resetn" 4;
+IO_PORT "resetn" IO_TYPE=LVCMOS33 PULL_MODE=UP;
+
+// Second onboard button (pin 3, the one NOT wired to resetn/pin 4) --
+// toggles the seed pattern (single glider <-> multi-glider) at runtime.
+// Active-low, same convention as resetn (top.v inverts it to active-high
+// before passing it into the hotc-generated module, same treatment as rst).
+IO_LOC "mode_btn_n" 3;
+IO_PORT "mode_btn_n" IO_TYPE=LVCMOS33 PULL_MODE=UP;
+
+// SPI LCD Interface
+IO_LOC "lcd_data" 77;
+IO_PORT "lcd_data" IO_TYPE=LVCMOS33 DRIVE=8 PULL_MODE=UP;
+
+IO_LOC "lcd_clk" 76;
+IO_PORT "lcd_clk" IO_TYPE=LVCMOS33 DRIVE=8 PULL_MODE=UP;
+
+IO_LOC "lcd_cs" 48;
+IO_PORT "lcd_cs" IO_TYPE=LVCMOS33 DRIVE=8 PULL_MODE=UP;
+
+IO_LOC "lcd_rs" 49;
+IO_PORT "lcd_rs" IO_TYPE=LVCMOS33 DRIVE=8 PULL_MODE=UP;
+
+IO_LOC "lcd_resetn" 47;
+IO_PORT "lcd_resetn" IO_TYPE=LVCMOS33 DRIVE=8 PULL_MODE=UP;
