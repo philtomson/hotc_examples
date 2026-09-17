@@ -1,0 +1,17 @@
+[metadata]
+generated_from = "step"
+variable_count = 5
+
+[state_variables]
+"0" = { name = "rx_data", type = "output", initial_value = 0, width = 8, is_unsigned = false }
+"8" = { name = "rx_done", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"9" = { name = "rx_busy", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+
+[input_variables]
+"0" = { name = "rx_in", type = "input", width = 1, start_bit = 0, referenced = true, compacted_start_bit = 0 }
+
+[switches]
+
+[external_inputs]
+
+[expressions]

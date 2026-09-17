@@ -64,7 +64,7 @@ docs/hotc_programming.md     hotc C-subset language reference
 examples/
   Tsetlin_hotstate_uart/     Tsetlin Machine MNIST classifier over UART
   gol-hotstate/              Conway's Game of Life, rendered to an SPI LCD
-  webserver/                 (coming next)
+  webserver/                 HTTP web server with browser LED control, over UART
 tools.mk                     shared synthesis tool-path overrides
 ```
 
@@ -139,7 +139,12 @@ renamed upstream.
   to a 1.14" ST7789 SPI LCD. A physical button toggles between two seed
   patterns. Tang Nano 9K only (needs the SPI LCD). Verified against a
   canonical B3/S23 software oracle and flashed to real hardware.
-- **`webserver`** — coming next.
+- **[`webserver`](examples/webserver/)** — a small HTTP server, served
+  entirely from compiled hotstate microcode, with a browser-based dashboard
+  to toggle on-board LEDs. Talks over plain UART via a host-side TCP
+  bridge (`bridge.py`); a real-time Verilator bridge lets you try it with
+  no board at all. Tang Nano 9K and 20K, both verified end-to-end on real
+  hardware with real browser traffic.
 
 ## License
 

@@ -1,0 +1,81 @@
+# Makefile.synth_tang20k — Synthesis pipeline for Tang Nano 20K FPGA webserver
+# Reuses project tools.mk and local.mk paths
+#
+# http_server_template.v/uart_tx_template.v/uart_rx_template.v are hotc's
+# OUTPUT, checked in as-is -- this repo doesn't ship the hotc compiler
+# itself, so there's no `generate` step here.
+
+IP_DIR      = ../../IP
+
+-include ../../tools.mk
+-include ../../local.mk
+
+GOWIN_DEVICE = GW2AR-LV18QN88C8/I7
+GOWIN_FAMILY = GW2A-18C
+TOP          = webserver_top
+CST          = webserver_tang20k.cst
+
+HOTC_TEMPLATES = http_server_template.v uart_tx_template.v uart_rx_template.v
+
+SRCS = webserver_top.v \
+       response_streamer.v \
+       $(HOTC_TEMPLATES) \
+       $(IP_DIR)/hotstate.sv \
+       $(IP_DIR)/microcode.sv \
+       $(IP_DIR)/control.sv \
+       $(IP_DIR)/next_address.sv \
+       $(IP_DIR)/timer.sv \
+       $(IP_DIR)/variable.sv \
+       $(IP_DIR)/switch.sv \
+       $(IP_DIR)/stack.sv
+
+.PHONY: all synth pnr pack prog clean_synth
+
+all: pack
+
+# -noalu: REQUIRED for correctness on GW2A-18C, not a tuning knob. yosys's
+# inferred ALU carry cells miscompute on this part -- see YosysHQ/apicula#514
+# and KNOWN_ISSUES.md. It was caught via examples/Tsetlin_hotstate_uart,
+# which got 5 of 7 placements WRONG on this board with ALU inference and
+# 4 of 4 right without.
+#
+# This design uses 436 ALU cells and has not been observed to fail -- but the
+# fault is placement-dependent, so "has not failed yet" means the placements tried
+# happened to be lucky, not that the design is immune. The flag is preventive.
+synth:
+	$(YOSYS) -ql synth_tang20k.log -p " \
+	  read_verilog -sv $(SRCS); \
+	  hierarchy -check -top $(TOP); \
+	  synth_gowin -noalu -top $(TOP) -json synth_tang20k.json; \
+	  stat"
+
+pnr: synth
+	# --timing-allow-fail: nextpnr-himbaechel reports ~10 small hold
+	# violations (worst -0.12ns) entirely inside the shared hotstate.sv IP
+	# core's internal LUT chains (Next_addr/Microcode/stack/timer/variable)
+	# -- the same core every other Tang Nano example on this project uses
+	# without issue. Setup timing has huge margin (134.77MHz max vs 12MHz
+	# target here), so this isn't a starved design; it reads like Gowin
+	# nextpnr-himbaechel's hold-time model being conservative for this
+	# specific 3-hotstate-instance placement rather than a real hazard.
+	# Confirmed benign on real hardware (Tang Nano 20K, 2026-08-21): all
+	# routes verified end to end with this flag in place, after fixing an
+	# unrelated real bug (see response_streamer.v's fsm_encoding attribute
+	# and this example's README.md "Hardware Bring-Up Notes") that had
+	# been masking whether these violations mattered at all.
+	$(NEXTPNR_HIMB) \
+	    --device $(GOWIN_DEVICE) \
+	    -o family=$(GOWIN_FAMILY) \
+	    --json synth_tang20k.json \
+	    -o cst=$(CST) \
+	    --timing-allow-fail \
+	    --write pnr_tang20k.json
+
+pack: pnr
+	$(GOWIN_PACK) -d $(GOWIN_FAMILY) -o design_tang20k.fs pnr_tang20k.json
+
+prog: pack
+	$(OPENFPGALOADER) -b tangnano20k design_tang20k.fs
+
+clean_synth:
+	rm -f synth_tang20k.json synth_tang20k.log pnr_tang20k.json design_tang20k.fs

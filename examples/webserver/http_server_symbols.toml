@@ -1,0 +1,39 @@
+[metadata]
+generated_from = "step"
+variable_count = 8
+comparator_bypass = true
+cmp_varsel_base = 4
+num_comparators = 14
+
+[state_variables]
+"0" = { name = "tx_start", type = "output", initial_value = 0 }
+"1" = { name = "led0", type = "output", initial_value = 0 }
+"2" = { name = "led1", type = "output", initial_value = 0 }
+"3" = { name = "active_route", type = "output", initial_value = 0 }
+
+[input_variables]
+"0" = { name = "rx_done", type = "input", width = 1, start_bit = 0, referenced = true, compacted_start_bit = 0 }
+"1" = { name = "rx_byte", type = "input", width = 8, start_bit = 1, referenced = false, compacted_start_bit = -1 }
+"2" = { name = "tx_busy", type = "input", width = 1, start_bit = 9, referenced = true, compacted_start_bit = 1 }
+
+[switches]
+
+[external_inputs]
+
+[expressions]
+
+[comparators]
+"0" = { op = "!=", lhs = "rx_byte", lhs_width = 8, lhs_is_state = false, rhs_value = 71, unsigned_cmp = false, bypass_varsel_id = 4 }
+"1" = { op = "!=", lhs = "rx_byte", lhs_width = 8, lhs_is_state = false, rhs_value = 69, unsigned_cmp = false, bypass_varsel_id = 5 }
+"2" = { op = "!=", lhs = "rx_byte", lhs_width = 8, lhs_is_state = false, rhs_value = 84, unsigned_cmp = false, bypass_varsel_id = 6 }
+"3" = { op = "!=", lhs = "rx_byte", lhs_width = 8, lhs_is_state = false, rhs_value = 32, unsigned_cmp = false, bypass_varsel_id = 7 }
+"4" = { op = "!=", lhs = "rx_byte", lhs_width = 8, lhs_is_state = false, rhs_value = 47, unsigned_cmp = false, bypass_varsel_id = 8 }
+"5" = { op = "==", lhs = "rx_byte", lhs_width = 8, lhs_is_state = false, rhs_value = 115, unsigned_cmp = false, bypass_varsel_id = 9 }
+"6" = { op = "==", lhs = "rx_byte", lhs_width = 8, lhs_is_state = false, rhs_value = 48, unsigned_cmp = false, bypass_varsel_id = 10 }
+"7" = { op = "==", lhs = "rx_byte", lhs_width = 8, lhs_is_state = false, rhs_value = 49, unsigned_cmp = false, bypass_varsel_id = 11 }
+"8" = { op = "==", lhs = "rx_byte", lhs_width = 8, lhs_is_state = false, rhs_value = 32, unsigned_cmp = false, bypass_varsel_id = 12 }
+"9" = { op = "==", lhs = "rx_byte", lhs_width = 8, lhs_is_state = false, rhs_value = 13, unsigned_cmp = false, bypass_varsel_id = 13 }
+"10" = { is_compound = true, compound_left_idx = 8, compound_right_idx = 9, compound_negate = false, compound_op = "||", bypass_varsel_id = 14 }
+"11" = { op = "==", lhs = "rx_byte", lhs_width = 8, lhs_is_state = false, rhs_value = 10, unsigned_cmp = false, bypass_varsel_id = 15 }
+"12" = { is_compound = true, compound_left_idx = 10, compound_right_idx = 11, compound_negate = false, compound_op = "||", bypass_varsel_id = 16 }
+"13" = { is_compound = true, compound_left_idx = 9, compound_right_idx = 11, compound_negate = false, compound_op = "||", bypass_varsel_id = 17 }

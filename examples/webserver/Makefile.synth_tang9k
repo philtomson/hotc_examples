@@ -1,0 +1,60 @@
+# Makefile.synth_tang9k — Synthesis pipeline for Tang Nano 9K FPGA webserver
+# Reuses project tools.mk and local.mk paths
+#
+# http_server_template.v/uart_tx_template.v/uart_rx_template.v are hotc's
+# OUTPUT, checked in as-is -- this repo doesn't ship the hotc compiler
+# itself, so there's no `generate` step here (response_main.h/.mem etc.
+# ARE regenerable via `make generate` in this directory's plain Makefile,
+# since generate_response.py is ordinary Python, not hotc).
+
+IP_DIR      = ../../IP
+
+-include ../../tools.mk
+-include ../../local.mk
+
+GOWIN_DEVICE = GW1NR-LV9QN88PC6/I5
+GOWIN_FAMILY = GW1N-9C
+TOP          = webserver_top
+CST          = webserver_tang9k.cst
+
+HOTC_TEMPLATES = http_server_template.v uart_tx_template.v uart_rx_template.v
+
+SRCS = webserver_top.v \
+       response_streamer.v \
+       $(HOTC_TEMPLATES) \
+       $(IP_DIR)/hotstate.sv \
+       $(IP_DIR)/microcode.sv \
+       $(IP_DIR)/control.sv \
+       $(IP_DIR)/next_address.sv \
+       $(IP_DIR)/timer.sv \
+       $(IP_DIR)/variable.sv \
+       $(IP_DIR)/switch.sv \
+       $(IP_DIR)/stack.sv
+
+.PHONY: all synth pnr pack prog clean_synth
+
+all: pack
+
+synth:
+	$(YOSYS) -ql synth_tang9k.log -p " \
+	  read_verilog -sv $(SRCS); \
+	  hierarchy -check -top $(TOP); \
+	  synth_gowin -top $(TOP) -json synth_tang9k.json; \
+	  stat"
+
+pnr: synth
+	$(NEXTPNR_HIMB) \
+	    --device $(GOWIN_DEVICE) \
+	    -o family=$(GOWIN_FAMILY) \
+	    --json synth_tang9k.json \
+	    -o cst=$(CST) \
+	    --write pnr_tang9k.json
+
+pack: pnr
+	$(GOWIN_PACK) -d $(GOWIN_FAMILY) -o design_tang9k.fs pnr_tang9k.json
+
+prog: pack
+	$(OPENFPGALOADER) -b tangnano9k design_tang9k.fs
+
+clean_synth:
+	rm -f synth_tang9k.json synth_tang9k.log pnr_tang9k.json design_tang9k.fs

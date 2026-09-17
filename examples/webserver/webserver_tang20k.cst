@@ -1,0 +1,26 @@
+// webserver_tang20k.cst
+// Pin constraints for Hotstate HTTP Web Server on Tang Nano 20K FPGA
+
+IO_LOC "clk" 4;
+IO_PORT "clk" PULL_UP=NONE IO_TYPE=LVCMOS33;
+
+IO_LOC "rst_n" 19;
+IO_PORT "rst_n" PULL_UP=UP IO_TYPE=LVCMOS33;
+
+IO_LOC "uart_txd" 69;
+IO_PORT "uart_txd" IO_TYPE=LVCMOS33;
+
+IO_LOC "uart_rxd" 70;
+IO_PORT "uart_rxd" PULL_UP=UP IO_TYPE=LVCMOS33;
+
+IO_LOC "led0" 15;
+IO_PORT "led0" IO_TYPE=LVCMOS33;
+
+IO_LOC "led1" 16;
+IO_PORT "led1" IO_TYPE=LVCMOS33;
+
+IO_LOC "led2" 17;
+IO_PORT "led2" IO_TYPE=LVCMOS33;
+
+IO_LOC "led3" 7;
+IO_PORT "led3" IO_TYPE=LVCMOS33;
