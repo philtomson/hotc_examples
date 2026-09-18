@@ -1,0 +1,34 @@
+// Tang Nano 20K Physical Constraints
+
+IO_LOC "sys_clk" 4;
+// IO_TYPE is REQUIRED here. Without it Gowin defaults the pin to LVCMOS18,
+// which fights the 3.3V bank voltage set by the other pins in bank 7 --
+// gw_sh rejects it outright (CT1136) while yosys/nextpnr/apycula builds it
+// silently. Found 2026-09-17 by running this .cst through the Gowin flow.
+IO_PORT "sys_clk" PULL_MODE=UP IO_TYPE=LVCMOS33;
+
+// s1 (pin 88) is deliberately NOT constrained or used: it is the MODE0
+// configuration strap as well as the S1 button, it reads LOW on this board,
+// and wiring it into the reset term held the whole design in permanent
+// reset. top.v now uses the power-on stretch alone.
+
+// BL702 UART Bridge
+IO_LOC "uart_tx" 69;
+IO_PORT "uart_tx" IO_TYPE=LVCMOS33 PULL_MODE=NONE;
+
+IO_LOC "uart_rx" 70;
+IO_PORT "uart_rx" IO_TYPE=LVCMOS33 PULL_MODE=NONE;
+
+// 6 On-board LEDs
+IO_LOC "led[5]" 20;
+IO_PORT "led[5]" PULL_MODE=UP DRIVE=8 IO_TYPE=LVCMOS33;
+IO_LOC "led[4]" 19;
+IO_PORT "led[4]" PULL_MODE=UP DRIVE=8 IO_TYPE=LVCMOS33;
+IO_LOC "led[3]" 18;
+IO_PORT "led[3]" PULL_MODE=UP DRIVE=8 IO_TYPE=LVCMOS33;
+IO_LOC "led[2]" 17;
+IO_PORT "led[2]" PULL_MODE=UP DRIVE=8 IO_TYPE=LVCMOS33;
+IO_LOC "led[1]" 16;
+IO_PORT "led[1]" PULL_MODE=UP DRIVE=8 IO_TYPE=LVCMOS33;
+IO_LOC "led[0]" 15;
+IO_PORT "led[0]" PULL_MODE=UP DRIVE=8 IO_TYPE=LVCMOS33;

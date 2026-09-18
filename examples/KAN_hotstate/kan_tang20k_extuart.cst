@@ -1,0 +1,57 @@
+// kan_tang20k_extuart.cst -- UART moved OFF the on-board bridge.
+//
+// This board's BL616 USB-serial bridge has a dead UART path: pins 69/70 are
+// correct per both the 3920 and 3923 schematics, and the FPGA drives them
+// correctly (verified with two independent toolchains), but nothing reaches
+// the host in either direction, while JTAG on the same chip is fine.
+// Updating the debugger firmware (2023030621 -> 2025030317) did not help.
+//
+// Workaround: route the UART to free header pins and use an external 3.3V
+// USB-TTL adapter. Verified working: a plain-Verilog transmitter on pin 73
+// is received cleanly by the adapter, proving the FPGA IO is healthy and
+// the fault is confined to the BL616 or its two traces.
+//
+//   FPGA pin 73 (IOT40A, pure GPIO, left header top) = uart_tx -> adapter RX
+//   FPGA pin 74 (IOT34B, pure GPIO, next one down)   = uart_rx <- adapter TX
+//   board GND <-> adapter GND
+//
+// Build with:  make -f Makefile.synth_tang20k pack \
+//                   CST=kan_tang20k_extuart.cst BAUD=115200
+// BAUD=115200 because the PL2303 adapter used here silently clamps higher
+// rates -- 460800, 921600 and 2M all produced undecodable framing, while
+// 115200 decoded a known pattern perfectly.
+//
+// Tang Nano 20K Physical Constraints
+
+IO_LOC "sys_clk" 4;
+// IO_TYPE is REQUIRED here. Without it Gowin defaults the pin to LVCMOS18,
+// which fights the 3.3V bank voltage set by the other pins in bank 7 --
+// gw_sh rejects it outright (CT1136) while yosys/nextpnr/apycula builds it
+// silently. Found 2026-09-17 by running this .cst through the Gowin flow.
+IO_PORT "sys_clk" PULL_MODE=UP IO_TYPE=LVCMOS33;
+
+// s1 (pin 88) is deliberately NOT constrained or used: it is the MODE0
+// configuration strap as well as the S1 button, it reads LOW on this board,
+// and wiring it into the reset term held the whole design in permanent
+// reset. top.v now uses the power-on stretch alone.
+
+// BL702 UART Bridge
+IO_LOC "uart_tx" 73;
+IO_PORT "uart_tx" IO_TYPE=LVCMOS33 PULL_MODE=NONE;
+
+IO_LOC "uart_rx" 74;
+IO_PORT "uart_rx" IO_TYPE=LVCMOS33 PULL_MODE=NONE;
+
+// 6 On-board LEDs
+IO_LOC "led[5]" 20;
+IO_PORT "led[5]" PULL_MODE=UP DRIVE=8 IO_TYPE=LVCMOS33;
+IO_LOC "led[4]" 19;
+IO_PORT "led[4]" PULL_MODE=UP DRIVE=8 IO_TYPE=LVCMOS33;
+IO_LOC "led[3]" 18;
+IO_PORT "led[3]" PULL_MODE=UP DRIVE=8 IO_TYPE=LVCMOS33;
+IO_LOC "led[2]" 17;
+IO_PORT "led[2]" PULL_MODE=UP DRIVE=8 IO_TYPE=LVCMOS33;
+IO_LOC "led[1]" 16;
+IO_PORT "led[1]" PULL_MODE=UP DRIVE=8 IO_TYPE=LVCMOS33;
+IO_LOC "led[0]" 15;
+IO_PORT "led[0]" PULL_MODE=UP DRIVE=8 IO_TYPE=LVCMOS33;

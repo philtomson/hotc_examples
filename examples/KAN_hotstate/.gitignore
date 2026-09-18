@@ -1,0 +1,12 @@
+# Trained weights: 6.5 MB of data derived from KAN_LUT. Regenerate with
+#   KAN_LUT_MNIST=<path>/examples/MNIST python3 pack_weights.py
+weights.bin
+
+# Verilator build output (the repo root ignores obj_dir/, these are suffixed)
+obj_dir*/
+
+# Local synthesis products for this example
+design_tang20k.fs
+synth_tang20k.*
+pnr_tang20k.json
+hw_layer1_dump.txt

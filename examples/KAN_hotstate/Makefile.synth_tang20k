@@ -1,0 +1,128 @@
+# Makefile.synth_tang20k -- Tang Nano 20K (Gowin GW2AR-LV18QN88C8/I7) synthesis
+# for KAN_hotstate.
+#
+# Toolchain:  yosys synth_gowin -> nextpnr-himbaechel -> gowin_pack -> openFPGALoader
+# Full flow:  make -f Makefile.synth_tang20k prog
+#
+# The *_template.v / *.mem / *.vh files are hotc's OUTPUT, checked in as-is --
+# this repo does not ship the hotc compiler, so there is no `generate` step.
+# The .c sources beside them are included for reference only; editing them has
+# no effect here without hotc.
+#
+# The checked-in UART machines in build_tang20k/ are built for
+# 54 MHz / 2 Mbaud (27 cycles per bit). Changing the baud requires hotc.
+#
+# -noalu is REQUIRED, not a tuning knob: yosys's inferred ALU carry cells
+# miscompute on GW2A-18C (YosysHQ/apicula#514). Verified here: 0 ALU cells.
+
+# Makefile.synth_tang20k — Synthesis pipeline for the KAN_hotstate MNIST
+# classifier (Sipeed Tang Nano 20K, GW2AR-LV18QN88C8/I7). Tang Nano 20K
+# only: the embedded SDRAM this design depends on is specific to this
+# board (see KAN_LUT/hardware/README.md) -- there is no 9K or Primer 25K
+# variant of this example.
+#
+# This board is 54 MHz (PLL-derived, SDRAM requirement) with a 2 Mbaud
+# UART, not this project's usual 27 MHz/115200 baud -- the UART machines
+# encode the baud divisor as a cycle count in C, so uart_tx.c/uart_rx.c
+# are retimed via generated wrapper sources under $(BUILD)/, same
+# mechanism as Makefile.synth_primer25k.
+
+IP_DIR    = ../../IP
+
+-include ../../tools.mk
+-include ../../local.mk
+
+-include ../../tools.mk
+-include ../../local.mk
+
+GOWIN_DEVICE = GW2AR-LV18QN88C8/I7
+
+# Optional placement seed. Normally unset: -noalu is the real fix for this
+# part's placement-dependent miscompute (see examples/Tsetlin_hotstate_uart's
+# Makefile.synth_tang20k and plans/bugs.md), and a seed only makes one lucky
+# placement repeatable. Exposed here purely so a suspected placement
+# dependency can be TESTED -- if the same design passes on one seed and fails
+# on another, placement is the variable.
+PNR_SEED ?=
+GOWIN_FAMILY = GW2A-18C
+TOP          = top
+CST          = kan_tang20k.cst
+BUILD        = build_tang20k
+
+
+
+UART_TEMPLATES = $(BUILD)/uart_tx_template.v $(BUILD)/uart_rx_template.v
+KAN_TEMPLATE   = kan_control_template.v
+
+SRCS = top.v \
+       kan_sdram_shim.v \
+       sdram.v \
+       gowin_rpll/gowin_rpll.v \
+       $(KAN_TEMPLATE) \
+       $(UART_TEMPLATES) \
+       $(IP_DIR)/hotstate.sv \
+       $(IP_DIR)/microcode.sv \
+       $(IP_DIR)/control.sv \
+       $(IP_DIR)/next_address.sv \
+       $(IP_DIR)/timer.sv \
+       $(IP_DIR)/variable.sv \
+       $(IP_DIR)/switch.sv \
+       $(IP_DIR)/stack.sv
+
+.PHONY: all synth pnr pack prog clean_synth
+
+all: pack
+
+# --- retimed UART sources ---------------------------------------------------
+
+
+# --- synthesis ---------------------------------------------------------------
+# -noalu: REQUIRED for correctness on GW2A-18C, not a tuning knob -- yosys's
+# inferred ALU carry cells miscompute on this part. See
+# examples/Tsetlin_hotstate_uart/README.md ("Tang Nano 20K: build with
+# -noalu") and plans/bugs.md (YosysHQ/apicula#514). kan_control.c's
+# accumulator arithmetic (acc = acc + weightN, up to 24 bits) is exactly
+# the kind of ALU-carry-chain-heavy construct that bug hits.
+#
+# NOTE: no standalone `hierarchy -check` before synth_gowin -- synth_gowin
+# loads the Gowin primitive cell library (rPLL, etc., needed for
+# gowin_rpll.v's PLL instance) and runs its own hierarchy pass internally;
+# a hierarchy check that runs first doesn't know about those cells yet and
+# errors on any design that instantiates a Gowin primitive. Same fix
+# examples/hdmi_gpu's Makefile.synth_tang20k already documents.
+synth: $(KAN_TEMPLATE) $(UART_TEMPLATES)
+	@echo "=== Yosys Gowin synthesis for $(TOP) (Tang Nano 20K) ==="
+	$(YOSYS) -ql synth_tang20k.log -p " \
+	  read_verilog -sv $(SRCS); \
+	  synth_gowin -noalu -top $(TOP) -json synth_tang20k.json; \
+	  stat"
+	@echo "=== Gowin 20K synthesis done — see synth_tang20k.log ==="
+
+pnr: synth
+	@echo "=== nextpnr-himbaechel Gowin 20K place and route ==="
+	# --timing-allow-fail: same rationale as this project's other Tang Nano
+	# 20K flows -- nextpnr-himbaechel's hold model is conservative on the
+	# shared hotstate.sv IP core's internal LUT chains. Confirm real
+	# behaviour on hardware, not the static timing report.
+	$(NEXTPNR_HIMB) \
+	    --device $(GOWIN_DEVICE) \
+	    -o family=$(GOWIN_FAMILY) \
+	    --json synth_tang20k.json \
+	    -o cst=$(CST) \
+	    --timing-allow-fail \
+	    $(if $(PNR_SEED),--seed $(PNR_SEED)) \
+	    --write pnr_tang20k.json
+	@echo "=== Gowin 20K P&R done — see pnr_tang20k.json ==="
+
+pack: pnr
+	@echo "=== gowin_pack: creating 20K bitstream ==="
+	$(GOWIN_PACK) -d $(GOWIN_FAMILY) -o design_tang20k.fs pnr_tang20k.json
+	@echo "=== Bitstream: design_tang20k.fs ==="
+
+prog: pack
+	@echo "=== openFPGALoader: programming Tang Nano 20K ==="
+	$(OPENFPGALOADER) -b tangnano20k design_tang20k.fs
+	@echo "=== Programming done ==="
+
+clean_synth:
+	rm -rf $(BUILD) synth_tang20k.json synth_tang20k.log pnr_tang20k.json design_tang20k.fs

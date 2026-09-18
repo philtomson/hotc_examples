@@ -66,6 +66,7 @@ examples/
   Tsetlin_hotstate_uart/     Tsetlin Machine MNIST classifier over UART
   gol-hotstate/              Conway's Game of Life, rendered to an SPI LCD
   webserver/                 HTTP web server with browser LED control, over UART
+  KAN_hotstate/              Kolmogorov-Arnold Network MNIST classifier (Tang Nano 20K)
 tools.mk                     shared synthesis tool-path overrides
 ```
 
@@ -140,6 +141,16 @@ renamed upstream.
   to a 1.14" ST7789 SPI LCD. A physical button toggles between two seed
   patterns. Tang Nano 9K only (needs the SPI LCD). Verified against a
   canonical B3/S23 software oracle and flashed to real hardware.
+- **[`KAN_hotstate`](examples/KAN_hotstate/)** — a **Kolmogorov–Arnold
+  Network** MNIST digit classifier. KANs put learnable univariate functions on
+  the *edges* instead of fixed activations on the nodes, so once discretised
+  every edge becomes a lookup table and inference is table lookups plus an
+  integer adder tree — **zero DSP blocks, no floating point**. 6.75 MB of
+  trained weights live in the Tang Nano 20K's in-package SDRAM, streamed in over
+  UART at 2 Mbaud in ~34 s. The classified digit is displayed in binary on the
+  board's LEDs. Verified 100/100 in simulation **and** 100/100 on real hardware.
+  Includes `draw_digit_kan.py`, an interactive GUI to draw a digit and read the
+  answer off the board. Tang Nano 20K only (needs the in-package SDRAM).
 - **[`webserver`](examples/webserver/)** — a small HTTP server, served
   entirely from compiled hotstate microcode, with a browser-based dashboard
   to toggle on-board LEDs. Talks over plain UART via a host-side TCP

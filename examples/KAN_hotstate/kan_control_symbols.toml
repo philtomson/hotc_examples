@@ -1,0 +1,94 @@
+[metadata]
+generated_from = "step"
+variable_count = 29
+comparator_bypass = true
+cmp_varsel_base = 6
+num_comparators = 9
+
+[state_variables]
+"0" = { name = "sdram_wr_req", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"1" = { name = "sdram_rd_req", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"2" = { name = "sdram_addr", type = "output", initial_value = 0, width = 23, is_unsigned = true }
+"25" = { name = "sdram_wr_data", type = "output", initial_value = 0, width = 8, is_unsigned = false }
+"33" = { name = "tx_start", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"34" = { name = "tx_data", type = "output", initial_value = 0, width = 8, is_unsigned = false }
+"42" = { name = "byte_idx", type = "output", initial_value = 0, width = 23, is_unsigned = true }
+"65" = { name = "p", type = "output", initial_value = 0, width = 9, is_unsigned = false }
+"74" = { name = "q", type = "output", initial_value = 0, width = 8, is_unsigned = false }
+"82" = { name = "acc", type = "output", initial_value = 0, width = 24, is_unsigned = false }
+"106" = { name = "rd_addr", type = "output", initial_value = 0, width = 23, is_unsigned = true }
+"129" = { name = "byte_lo", type = "output", initial_value = 0, width = 8, is_unsigned = true }
+"137" = { name = "byte_hi", type = "output", initial_value = 0, width = 8, is_unsigned = true }
+"145" = { name = "combined", type = "output", initial_value = 0, width = 16, is_unsigned = true }
+"161" = { name = "weight14", type = "output", initial_value = 0, width = 14, is_unsigned = false }
+"175" = { name = "weight13", type = "output", initial_value = 0, width = 13, is_unsigned = false }
+"188" = { name = "shifted", type = "output", initial_value = 0, width = 24, is_unsigned = false }
+"212" = { name = "val", type = "output", initial_value = 0, width = 9, is_unsigned = false }
+"221" = { name = "best_class", type = "output", initial_value = 0, width = 5, is_unsigned = false }
+"226" = { name = "max_score", type = "output", initial_value = 0, width = 9, is_unsigned = false }
+"235" = { name = "in_mem__wr_en", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"236" = { name = "layer1_out__wr_en", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"237" = { name = "__arrtmp0", type = "output", initial_value = 0, width = 8, is_unsigned = false }
+"245" = { name = "__arrtmp1", type = "output", initial_value = 0, width = 8, is_unsigned = false }
+
+[input_variables]
+"0" = { name = "sdram_busy", type = "input", width = 1, start_bit = 0, referenced = true, compacted_start_bit = 0 }
+"1" = { name = "sdram_rd_byte", type = "input", width = 8, start_bit = 1, referenced = false, compacted_start_bit = -1 }
+"2" = { name = "rx_done", type = "input", width = 1, start_bit = 9, referenced = true, compacted_start_bit = 1 }
+"3" = { name = "rx_byte", type = "input", width = 8, start_bit = 10, referenced = true, compacted_start_bit = 2 }
+"4" = { name = "tx_busy", type = "input", width = 1, start_bit = 18, referenced = true, compacted_start_bit = 10 }
+
+[switches]
+
+[external_inputs]
+
+[timers]
+
+[expressions]
+"1" = { expr = "byte_idx", result_width = 23, state_lo = 2, state_hi = 24 }
+"2" = { expr = "rx_byte", result_width = 8, state_lo = 25, state_hi = 32 }
+"3" = { expr = "rd_addr", result_width = 23, state_lo = 2, state_hi = 24 }
+"4" = { expr = "sdram_rd_byte", result_width = 8, state_lo = 129, state_hi = 136 }
+"5" = { expr = "(((rd_addr) + (1)) & 8388607)", result_width = 23, state_lo = 2, state_hi = 24 }
+"6" = { expr = "sdram_rd_byte", result_width = 8, state_lo = 137, state_hi = 144 }
+"7" = { expr = "byte_hi", result_width = 16, state_lo = 145, state_hi = 160 }
+"8" = { expr = "(((combined) << (8)) & 65535)", result_width = 16, state_lo = 145, state_hi = 160 }
+"9" = { expr = "(((combined) + (byte_lo)) & 65535)", result_width = 16, state_lo = 145, state_hi = 160 }
+"10" = { expr = "q", result_width = 23, state_lo = 106, state_hi = 128 }
+"11" = { expr = "(((rd_addr) * (196)) & 8388607)", result_width = 23, state_lo = 106, state_hi = 128 }
+"12" = { expr = "(((rd_addr) + (p)) & 8388607)", result_width = 23, state_lo = 106, state_hi = 128 }
+"13" = { expr = "(((rd_addr) * (256)) & 8388607)", result_width = 23, state_lo = 106, state_hi = 128 }
+"14" = { expr = "in_mem[p]", result_width = 8, state_lo = 237, state_hi = 244 }
+"15" = { expr = "(((rd_addr) + (__arrtmp0)) & 8388607)", result_width = 23, state_lo = 106, state_hi = 128 }
+"16" = { expr = "(((rd_addr) * (2)) & 8388607)", result_width = 23, state_lo = 106, state_hi = 128 }
+"17" = { expr = "(((rd_addr) * (64)) & 8388607)", result_width = 23, state_lo = 106, state_hi = 128 }
+"18" = { expr = "layer1_out[p]", result_width = 8, state_lo = 245, state_hi = 252 }
+"19" = { expr = "(((rd_addr) + (__arrtmp1)) & 8388607)", result_width = 23, state_lo = 106, state_hi = 128 }
+"20" = { expr = "(((rd_addr) + (3211264)) & 8388607)", result_width = 23, state_lo = 106, state_hi = 128 }
+"21" = { expr = "(((byte_idx) + (1)) & 8388607)", result_width = 23, state_lo = 42, state_hi = 64 }
+"22" = { expr = "(((signed(p, 9)) + (1)) & 511)", result_width = 9, state_lo = 65, state_hi = 73 }
+"23" = { expr = "(((signed(q, 8)) + (1)) & 255)", result_width = 8, state_lo = 74, state_hi = 81 }
+"24" = { expr = "combined", result_width = 14, state_lo = 161, state_hi = 174 }
+"25" = { expr = "(((signed(acc, 24)) + (signed(weight14, 14))) & 16777215)", result_width = 24, state_lo = 82, state_hi = 105 }
+"26" = { expr = "((sshr(signed((((signed(acc, 24)) + (8)) & 16777215), 24), 4)) & 16777215)", result_width = 24, state_lo = 188, state_hi = 211 }
+"27" = { expr = "shifted", result_width = 9, state_lo = 212, state_hi = 220 }
+"28" = { expr = "combined", result_width = 13, state_lo = 175, state_hi = 187 }
+"29" = { expr = "(((signed(acc, 24)) + (signed(weight13, 13))) & 16777215)", result_width = 24, state_lo = 82, state_hi = 105 }
+"30" = { expr = "val", result_width = 9, state_lo = 226, state_hi = 234 }
+"31" = { expr = "q", result_width = 5, state_lo = 221, state_hi = 225 }
+"32" = { expr = "best_class", result_width = 8, state_lo = 34, state_hi = 41 }
+
+[writable_arrays]
+"in_mem" = { element_width = 8, depth = 196, wr_en_state_bit = 235, wr_addr_state_lo = 65, wr_addr_state_hi = 73, wr_data_state_lo = -1, wr_data_state_hi = -1, wr_addr_expr = "p", wr_data_expr = "rx_byte" }
+"layer1_out" = { element_width = 8, depth = 64, wr_en_state_bit = 236, wr_addr_state_lo = 74, wr_addr_state_hi = 81, wr_data_state_lo = 212, wr_data_state_hi = 220, wr_addr_expr = "q", wr_data_expr = "val" }
+
+[comparators]
+"0" = { op = "<", lhs = "byte_idx", lhs_width = 23, lhs_is_state = true, rhs_value = 6750208, unsigned_cmp = true, bypass_varsel_id = 6 }
+"1" = { op = "<", lhs = "p", lhs_width = 9, lhs_is_state = true, rhs_value = 196, unsigned_cmp = false, bypass_varsel_id = 7 }
+"2" = { op = "<", lhs = "q", lhs_width = 8, lhs_is_state = true, rhs_value = 64, unsigned_cmp = false, bypass_varsel_id = 8 }
+"3" = { op = ">", lhs = "shifted", lhs_width = 24, lhs_is_state = true, rhs_value = 255, unsigned_cmp = false, bypass_varsel_id = 9 }
+"4" = { op = "<", lhs = "shifted", lhs_width = 24, lhs_is_state = true, rhs_value = 0, unsigned_cmp = false, bypass_varsel_id = 10 }
+"5" = { op = "<", lhs = "q", lhs_width = 8, lhs_is_state = true, rhs_value = 10, unsigned_cmp = false, bypass_varsel_id = 11 }
+"6" = { op = "<", lhs = "p", lhs_width = 9, lhs_is_state = true, rhs_value = 64, unsigned_cmp = false, bypass_varsel_id = 12 }
+"7" = { op = "==", lhs = "q", lhs_width = 8, lhs_is_state = true, rhs_value = 0, unsigned_cmp = false, bypass_varsel_id = 13 }
+"8" = { op = ">", lhs = "val", lhs_width = 9, lhs_is_state = true, rhs = "max_score", rhs_width = 9, rhs_is_state = true, unsigned_cmp = false, bypass_varsel_id = 14 }
