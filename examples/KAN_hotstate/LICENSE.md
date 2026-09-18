@@ -1,8 +1,9 @@
-Copyright (c) 2026 Steve Casselman and Phil Tomson
+Copyright (c) 2026 Hotwright Inc.
 
 This license applies to the contents of this directory
-(`examples/Tsetlin_hotstate_uart/` — the Tsetlin Machine MNIST classifier
-example) only. Everything else in this repository is under the MIT license
+(`examples/KAN_hotstate/` — the Kolmogorov-Arnold Network MNIST
+classifier and its host-side tools) only. Everything else in this
+repository is under the MIT license
 at the repository root (`/LICENSE.md`) — see that file, and the "License"
 section of the repository's top-level `README.md`, for the split.
 

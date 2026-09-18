@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2026 Steve Casselman and Phil Tomson
+Copyright (c) 2026 Hotwright Inc.
 
 This license applies to this repository EXCEPT the following directories,
 each licensed separately under CC BY-NC-ND 4.0 (see their own `LICENSE.md`,
