@@ -71,14 +71,20 @@ Verified: the bitstream this produces is **byte-identical** to the one tested
 
 ## Running it
 
-The trained weights come from [KAN_LUT](https://github.com/philtomson/KAN_LUT)
-and are **not checked in** — 6.5 MB of derived data. Clone that repo and pack
-them:
+`weights.bin` (6.5 MB) is **checked in**, because it cannot practically be
+recreated. [KAN_LUT](https://github.com/philtomson/KAN_LUT) does not track its
+trained LUT JSONs — its `.gitignore` excludes `*.json` — so they only exist
+after running `demo.jl`, a full Julia/Flux training run. And retraining would
+produce *different* weights from a fresh random init, which would invalidate the
+`tb_data.txt` golden vectors here: those were generated from these exact
+weights.
+
+`pack_weights.py` is included for the case where you *do* have a KAN_LUT
+checkout with trained JSONs and want to repack (or have retrained and will
+regenerate `tb_data.txt` to match):
 
 ```bash
-git clone https://github.com/philtomson/KAN_LUT
-KAN_LUT_MNIST=KAN_LUT/examples/MNIST python3 pack_weights.py
-# -> weights.bin, 6,750,208 bytes
+KAN_LUT_MNIST=<path-to-KAN_LUT>/examples/MNIST python3 pack_weights.py
 ```
 
 Build and flash (2 Mbaud, result shown on the LEDs — see below):
