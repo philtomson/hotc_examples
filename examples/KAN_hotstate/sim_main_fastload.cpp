@@ -212,8 +212,13 @@ static bool run(int num_samples, long expect_bytes, bool liveness) {
     // docstring, which is stale for this file): 196 image bytes as 2-hex-digit
     // pairs with no delimiter, a space, then 10 reference per-class score
     // bytes. Expected class = argmax of those 10 scores.
-    std::ifstream tfile("/home/phil/devel/FPGA/KAN_LUT/examples/MNIST/FPGA/tb_data.txt");
-    if (!tfile) { std::cout << "[TB] FAIL: could not open tb_data.txt\n"; return false; }
+    // Golden vectors: the copy shipped beside this example, so a fresh clone
+    // works with no KAN_LUT checkout. Override with the TB_DATA env var.
+    const char *tb_env = getenv("TB_DATA");
+    const char *tb_path = tb_env ? tb_env : "tb_data.txt";
+    std::ifstream tfile(tb_path);
+    if (!tfile) { std::cout << "[TB] FAIL: could not open " << tb_path
+                  << " (set TB_DATA=<path> to override)\n"; return false; }
 
     // Refresh during INFERENCE is a separate question from refresh during the
     // load, and the more important one: the load runs once, but main() is

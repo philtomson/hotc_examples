@@ -22,12 +22,20 @@ class is the argmax of those 10 scores -- the same reference the Verilator
 harness and the software golden model are checked against, so hardware, sim and
 golden model are all being held to one standard.
 """
-import sys, time, argparse
+import os, sys, time, argparse
 import serial
 
 DEFAULT_BAUD = 2_000_000
 WEIGHT_BYTES = 6_750_208
-TB_DATA = "/home/phil/devel/FPGA/KAN_LUT/examples/MNIST/FPGA/tb_data.txt"
+# Golden vectors. Prefer the copy shipped beside this script so a fresh clone
+# works with no KAN_LUT checkout; fall back to KAN_LUT for a working tree that
+# has regenerated them. Override with the TB_DATA environment variable.
+_HERE = os.path.dirname(os.path.abspath(__file__))
+TB_DATA = os.environ.get(
+    "TB_DATA",
+    os.path.join(_HERE, "tb_data.txt") if os.path.exists(os.path.join(_HERE, "tb_data.txt"))
+    else os.path.expanduser("~/devel/FPGA/KAN_LUT/examples/MNIST/FPGA/tb_data.txt"),
+)
 
 
 def parse_tb_data(path):
