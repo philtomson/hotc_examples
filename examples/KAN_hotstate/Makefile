@@ -25,9 +25,29 @@ SIM_BIN = ../../sim/bin/hotstate_sim
 COMPARE_SCRIPT = ../../scripts/compare_traces.py
 MAX_CYCLES = 1000
 
-# Default target: run complete validation workflow
+# Default target. NOT lint, and not a build: `lint` used to be the first rule in
+# this file and therefore the default, which meant a plain `make` in a fresh
+# clone died with "No rule to make target 'kan_control_tb.v'" before doing
+# anything -- the generated testbench it wants was the one hotc artifact that did
+# not get checked in here. That is fixed (the .tb is committed now), but the
+# accidental default is worth replacing with a deliberate one: there is no single
+# obvious thing `make` should do for this example, since simulation lives here and
+# synthesis lives in Makefile.synth_tang20k.
+.DEFAULT_GOAL := help
 
+help:
+	@echo "KAN_hotstate -- targets in this Makefile (simulation; no hotc needed):"
+	@echo "  make ack_probe   every completed SDRAM handshake really issues a write"
+	@echo "  make rw_probe    bytes written through the shim read back as written"
+	@echo "  make fastload    full inference vs tb_data.txt, with a built-in golden model"
+	@echo "                   (needs weights.bin -- see README: python3 pack_weights.py)"
+	@echo "  make lint        Verilator lint of the generated core"
+	@echo ""
+	@echo "Bitstream for the Tang Nano 20K is a separate makefile:"
+	@echo "  make -f Makefile.synth_tang20k pack    synth + P&R + design_tang20k.fs"
+	@echo "  make -f Makefile.synth_tang20k prog    ... and flash it"
 
+.PHONY: help
 
 # Compile and run Verilator hardware simulation
 
