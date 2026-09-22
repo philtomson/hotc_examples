@@ -61,6 +61,7 @@ SRCS = tm_hw_top_uart.v \
 
 # ── Synthesis ────────────────────────────────────────────────────────────
 synth:
+	$(TOOL_BANNER)
 	@echo "=== Yosys Gowin synthesis for $(TOP) (Tang Nano 9K) ==="
 	$(YOSYS) -ql synth_primer25k.log -p " \
 	  read_verilog -sv $(SRCS); \

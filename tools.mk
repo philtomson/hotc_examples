@@ -63,3 +63,52 @@ show-tools:
 	@echo "PYTHON3        = $(PYTHON3)"
 
 .PHONY: show-tools
+
+# ── Build provenance ───────────────────────────────────────────────────────
+# Every variable above is `?=`, so a build silently takes whichever binary the
+# PATH happens to serve. That is the right default -- and it is also how a whole
+# afternoon got lost: this machine carries THREE yosys installs (/usr/local
+# 0.56, ~/bin/oss-cad-suite 0.69, ~/tools/oss-cad-suite 0.48) and TWO
+# nextpnr-himbaechels (0.11.1 and 0.7), and a failure report that says only
+# "synthesis failed" cannot be matched to the tools that produced it. A netlist
+# turned up whose size matched one yosys while the reporter's PATH named
+# another, and that discrepancy was never resolved -- there was no record.
+#
+# So every synthesis flow prints what it is about to use. $(TOOL_BANNER) is a
+# recipe fragment, not a target: it has to run inside the build whose log you
+# will later be reading, not as a separate step someone forgets.
+#
+# Version flags differ per tool and some have none, so each is tried in turn and
+# a tool that answers nothing still gets its resolved path printed -- the path
+# is the more useful half anyway.
+
+# -V on stderr (nextpnr does this), then --version, then give up: gowin_pack
+# has no version flag at all and answers -h with a usage block, which is worse
+# than saying nothing. Anything usage-shaped is discarded.
+# Drop the noise first: gowin_pack is a Python entry point and greets -V with
+# UserWarnings about numpy/msgspec before anything useful, and has no version
+# flag at all -- a usage block is worse than saying nothing.
+_tool_ver = $$( v=$$( { '$(1)' -V 2>&1 || '$(1)' --version 2>&1; } \
+                      | grep -vE 'Warning|warnings\.warn|^ |^/' \
+                      | grep -v '^$$' | head -1 ); \
+                case "$$v" in usage:*|Usage:*|'') echo '(no version flag)';; \
+                              *) echo "$$v" | cut -c1-52;; esac )
+_tool_pth = $$( command -v '$(1)' 2>/dev/null || echo '*** NOT FOUND ***' )
+
+define _tool_line
+	@printf '    %-11s %-38s %s\n' '$(1)' "$(call _tool_pth,$(2))" "$(call _tool_ver,$(2))"
+endef
+
+# Use as the first line of a synth/pnr/pack recipe:  $(TOOL_BANNER)
+define TOOL_BANNER
+	@echo "--- tools for this build (override in local.mk, or make YOSYS=... ) ---"
+	$(call _tool_line,yosys,$(YOSYS))
+	$(call _tool_line,nextpnr,$(NEXTPNR_HIMB))
+	$(call _tool_line,gowin_pack,$(GOWIN_PACK))
+endef
+
+# Standalone equivalent, for asking without building.
+tool-versions:
+	$(TOOL_BANNER)
+
+.PHONY: tool-versions

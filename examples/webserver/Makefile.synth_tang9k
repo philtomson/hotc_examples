@@ -36,6 +36,7 @@ SRCS = webserver_top.v \
 all: pack
 
 synth:
+	$(TOOL_BANNER)
 	$(YOSYS) -ql synth_tang9k.log -p " \
 	  read_verilog -sv $(SRCS); \
 	  hierarchy -check -top $(TOP); \

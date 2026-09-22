@@ -83,6 +83,7 @@ all: pack
 # errors on any design that instantiates a Gowin primitive. Same fix
 # examples/hdmi_gpu's Makefile.synth_tang20k already documents.
 synth: $(KAN_TEMPLATE) $(UART_TEMPLATES)
+	$(TOOL_BANNER)
 	@echo "=== Yosys Gowin synthesis for $(TOP) (Tang Nano 20K) ==="
 	$(YOSYS) -ql synth_tang20k.log -p " \
 	  read_verilog -sv $(SRCS); \

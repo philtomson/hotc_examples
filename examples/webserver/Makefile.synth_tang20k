@@ -43,6 +43,7 @@ all: pack
 # fault is placement-dependent, so "has not failed yet" means the placements tried
 # happened to be lucky, not that the design is immune. The flag is preventive.
 synth:
+	$(TOOL_BANNER)
 	$(YOSYS) -ql synth_tang20k.log -p " \
 	  read_verilog -sv $(SRCS); \
 	  hierarchy -check -top $(TOP); \
