@@ -1,5 +1,7 @@
 # Makefile.synth_tang20k -- Tang Nano 20K (Gowin GW2AR-LV18QN88C8/I7) synthesis
-# for KAN_hotstate.
+# for KAN_hotstate. Tang Nano 20K only: the embedded SDRAM this design
+# depends on is specific to this board -- there is no 9K or Primer 25K
+# variant of this example.
 #
 # Toolchain:  yosys synth_gowin -> nextpnr-himbaechel -> gowin_pack -> openFPGALoader
 # Full flow:  make -f Makefile.synth_tang20k prog
@@ -9,28 +11,18 @@
 # The .c sources beside them are included for reference only; editing them has
 # no effect here without hotc.
 #
-# The checked-in UART machines in build_tang20k/ are built for
-# 54 MHz / 2 Mbaud (27 cycles per bit). Changing the baud requires hotc.
-#
-# -noalu is REQUIRED, not a tuning knob: yosys's inferred ALU carry cells
-# miscompute on GW2A-18C (YosysHQ/apicula#514). Verified here: 0 ALU cells.
-
-# Makefile.synth_tang20k — Synthesis pipeline for the KAN_hotstate MNIST
-# classifier (Sipeed Tang Nano 20K, GW2AR-LV18QN88C8/I7). Tang Nano 20K
-# only: the embedded SDRAM this design depends on is specific to this
-# board (see KAN_LUT/hardware/README.md) -- there is no 9K or Primer 25K
-# variant of this example.
-#
 # This board is 54 MHz (PLL-derived, SDRAM requirement) with a 2 Mbaud
 # UART, not this project's usual 27 MHz/115200 baud -- the UART machines
 # encode the baud divisor as a cycle count in C, so uart_tx.c/uart_rx.c
 # are retimed via generated wrapper sources under $(BUILD)/, same
-# mechanism as Makefile.synth_primer25k.
+# mechanism as Makefile.synth_primer25k. The checked-in UART machines in
+# build_tang20k/ are built for 54 MHz / 2 Mbaud (27 cycles per bit).
+# Changing the baud requires hotc.
+#
+# -noalu is REQUIRED, not a tuning knob: yosys's inferred ALU carry cells
+# miscompute on GW2A-18C (YosysHQ/apicula#514). Verified here: 0 ALU cells.
 
 IP_DIR    = ../../IP
-
--include ../../tools.mk
--include ../../local.mk
 
 -include ../../tools.mk
 -include ../../local.mk
@@ -38,9 +30,10 @@ IP_DIR    = ../../IP
 GOWIN_DEVICE = GW2AR-LV18QN88C8/I7
 
 # Optional placement seed. Normally unset: -noalu is the real fix for this
-# part's placement-dependent miscompute (see examples/Tsetlin_hotstate_uart's
-# Makefile.synth_tang20k and plans/bugs.md), and a seed only makes one lucky
-# placement repeatable. Exposed here purely so a suspected placement
+# part's placement-dependent miscompute (see
+# examples/Tsetlin_hotstate_uart/KNOWN_ISSUES.md and YosysHQ/apicula#514),
+# and a seed only makes one lucky placement repeatable. Exposed here purely
+# so a suspected placement
 # dependency can be TESTED -- if the same design passes on one seed and fails
 # on another, placement is the variable.
 PNR_SEED ?=
@@ -79,10 +72,9 @@ all: pack
 # --- synthesis ---------------------------------------------------------------
 # -noalu: REQUIRED for correctness on GW2A-18C, not a tuning knob -- yosys's
 # inferred ALU carry cells miscompute on this part. See
-# examples/Tsetlin_hotstate_uart/README.md ("Tang Nano 20K: build with
-# -noalu") and plans/bugs.md (YosysHQ/apicula#514). kan_control.c's
-# accumulator arithmetic (acc = acc + weightN, up to 24 bits) is exactly
-# the kind of ALU-carry-chain-heavy construct that bug hits.
+# examples/Tsetlin_hotstate_uart/KNOWN_ISSUES.md (YosysHQ/apicula#514).
+# kan_control.c's accumulator arithmetic (acc = acc + weightN, up to 24
+# bits) is exactly the kind of ALU-carry-chain-heavy construct that bug hits.
 #
 # NOTE: no standalone `hierarchy -check` before synth_gowin -- synth_gowin
 # loads the Gowin primitive cell library (rPLL, etc., needed for
