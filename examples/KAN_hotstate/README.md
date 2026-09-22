@@ -2,7 +2,7 @@
 
 A **Kolmogorov–Arnold Network** (KAN) MNIST classifier running on a Sipeed Tang
 Nano 20K, where the entire control and compute-sequencing layer is written as
-hotc C (`kan_control.c`) rather than hand Verilog.
+hotc C (`kan_control.c`) rather than hand-written Verilog.
 
 **Verified: 100/100 in simulation and 100/100 on real hardware** against
 KAN_LUT's golden batch, at 29.9 ms/sample.
@@ -40,7 +40,7 @@ in-package SDRAM:
 Each layer accumulates its lookups, rounds with `(acc + 8) >> 4`, and saturates
 to 0..255; layer 2's argmax is the predicted digit.
 
-## What is hotc C and what is hand Verilog
+## What is hotc C and what is hand-written Verilog
 
 The point of this example: `kan_control.c` replaces what KAN_LUT's own FPGA
 demo does in hand-written Verilog (`kan_generic_core.sv` + `mnist_generic_top.sv`).
@@ -51,9 +51,9 @@ argmax and the UART sequencing are all ordinary C compiled to hotstate microcode
 |---|---|
 | `kan_control.c` | **hotc C** — all control and compute sequencing |
 | `uart_rx.c`, `uart_tx.c` | **hotc C** — 8N1 UART machines (from `examples/webserver`) |
-| `kan_sdram_shim.v` | hand Verilog — thin request/ack wrapper around `sdram.v` |
-| `sdram.v` | hand Verilog — KAN_LUT's controller, **unmodified** |
-| `top.v` | hand Verilog — PLL, reset, pin wiring, LED result display |
+| `kan_sdram_shim.v` | hand-written Verilog — thin request/ack wrapper around `sdram.v` |
+| `sdram.v` | hand-written Verilog — KAN_LUT's controller, **unmodified** |
+| `top.v` | hand-written Verilog — PLL, reset, pin wiring, LED result display |
 
 ## Building without hotc
 
