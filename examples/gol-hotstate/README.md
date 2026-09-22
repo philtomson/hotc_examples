@@ -114,16 +114,6 @@ straight through to the ST7789 panel.
 * Full project regression suite stays clean with this example's build
   flags and generated artifacts.
 
-Getting here took three independent compiler/source bugs found and fixed
-along the way (hotc's preprocessor initially lacked parameterized-macro
-support, hotc's parser initially lacked compound-assignment operators, and
-an early version of `gol.c` mistakenly declared its loop counters signed),
-plus two hardware-resource-fit issues: the Tang Nano 9K's distributed-RAM
-budget (`RAM16SDP4`) exhaustion, fixed via `__bram` (see "Algorithm"
-above), and Gowin's own proprietary toolchain being tried as an
-alternative and rejected — its BSRAM primitives cap at 36 bits/block, and
-the 497-bit-wide hotstate microcode word would need ~14 tiled primitives
-that Gowin's inference doesn't do automatically the way Yosys does.
 
 ## Files
 
