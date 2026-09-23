@@ -1,0 +1,50 @@
+# MicroCNN_hotstate -- Tang Nano 20K (GW2AR-18C) bitstream with GOWIN's
+# toolchain (gw_sh, from the Gowin EDA IDE; the free Education edition is
+# enough). No hotc needed: the generated microcode is checked in.
+#
+#   make -f Makefile.synth_tang20k_gowin pack            synth + P&R + bitstream
+#   make -f Makefile.synth_tang20k_gowin prog            ... and load it into SRAM
+#   make -f Makefile.synth_tang20k_gowin prog_verified   load the checked-in
+#                                                        verified bitstream, no build
+#
+# Why not the open-source flow on this board: it builds and meets timing, but
+# the bitstream misclassifies; the fault is in open-source place-and-route/
+# packing for GW2A-18C. The open-source build is Makefile.synth_primer25k.
+#
+# gw_sh is usually not on PATH. Point GW_SH at it (here, in ../../local.mk, or
+# in the environment), e.g.
+#   make -f Makefile.synth_tang20k_gowin pack GW_SH=/opt/gowin/IDE/bin/gw_sh
+#
+# gw_sh is a Qt program even when headless. If it exits at startup without
+# building anything, try GW_SH_ENV='QT_QPA_PLATFORM=minimal' (and, on systems
+# whose freetype is newer than the one Gowin bundles,
+# GW_SH_ENV='LD_PRELOAD=/lib64/libfreetype.so.6 QT_QPA_PLATFORM=minimal').
+
+-include ../../tools.mk
+-include ../../local.mk
+
+GW_SH     ?= gw_sh
+GW_SH_ENV ?=
+BUILD     := build_tang20k
+BITSTREAM := $(BUILD)/MicroCNN_tang20k/impl/pnr/MicroCNN_tang20k.fs
+
+.PHONY: pack prog prog_verified clean_synth
+
+pack:
+	@command -v $(GW_SH) >/dev/null 2>&1 || [ -x "$(GW_SH)" ] || { \
+	  echo "ERROR: gw_sh not found ('$(GW_SH)'). Install the Gowin EDA IDE and set GW_SH,"; \
+	  echo "       e.g. make -f Makefile.synth_tang20k_gowin pack GW_SH=/opt/gowin/IDE/bin/gw_sh"; \
+	  exit 1; }
+	env $(GW_SH_ENV) $(GW_SH) build_tang20k.tcl
+	@test -f $(BITSTREAM) || { echo "ERROR: gw_sh finished but $(BITSTREAM) was not produced"; exit 1; }
+	@echo "=== Bitstream: $(BITSTREAM) ==="
+
+prog: pack
+	$(OPENFPGALOADER) -b tangnano20k $(BITSTREAM)
+
+prog_verified:
+	$(OPENFPGALOADER) -b tangnano20k verified_bitstreams/tang20k_gowin_52of52.fs
+
+# Only build output lives in $(BUILD); everything tracked is outside it.
+clean_synth:
+	rm -rf $(BUILD)

@@ -67,7 +67,7 @@ examples/
   gol-hotstate/              Conway's Game of Life, rendered to an SPI LCD
   webserver/                 HTTP web server with browser LED control, over UART
   KAN_hotstate/              Kolmogorov-Arnold Network MNIST classifier (Tang Nano 20K)
-  MicroCNN_hotstate/         CNN blood-cell classifier, control plane in C (Tang Primer 25K)
+  MicroCNN_hotstate/         CNN blood-cell classifier, control plane in C (Primer 25K / Nano 20K)
 tools.mk                     shared synthesis tool-path overrides
 ```
 
@@ -157,8 +157,11 @@ renamed upstream.
   datapath is hand-written SystemVerilog; everything that sequences it — what
   would normally be a hierarchy of hand-written FSMs — is one hotc-compiled C
   program. Verified 52/52 against the quantized Python reference model on real
-  hardware. Tang Primer 25K only; needs a yosys with the slang plugin (the OSS
-  CAD Suite build has it).
+  hardware. Two builds: Tang Primer 25K on the open-source flow (needs a
+  yosys with the slang plugin, which the OSS CAD Suite build has), or Tang
+  Nano 20K with Gowin's own toolchain (`gw_sh`, from the free Gowin EDA IDE)
+  -- the one example here that uses it, because the open-source flow
+  miscompiles this design on the 20K.
 - **[`webserver`](examples/webserver/)** — a small HTTP server, served
   entirely from compiled hotstate microcode, with a browser-based dashboard
   to toggle on-board LEDs. Talks over plain UART via a host-side TCP
@@ -187,6 +190,8 @@ This repository is under two licenses, split by directory:
   `micro_cnn_blood.pth`, `golden_benchmark.py` and `uart_medmnist_loader.py`
   come from [SweiryDev/MicroCNN-TangNano20k](https://github.com/SweiryDev/MicroCNN-TangNano20k),
   which does not state a licence. They are NOT covered by the MIT grant above.
+  The same goes for `lib/gw2a/` and `tang20k.cst`, which are Gowin IDE output
+  from that repo and carry Gowin's own copyright header.
 
 If you're unsure which applies to a given file, check which directory it's
 in — each CC-BY-NC-ND directory's own `LICENSE.md` is the authoritative
