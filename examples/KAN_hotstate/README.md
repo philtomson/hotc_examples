@@ -67,7 +67,43 @@ The checked-in UART machines in `build_tang20k/` are built for **54 MHz /
 2 Mbaud**. Changing the baud requires hotc.
 
 Verified: the bitstream this produces is **byte-identical** to the one tested
-100/100 on hardware.
+100/100 on hardware — when built with the pinned yosys below.
+
+### Toolchain versions — yosys 0.56 works, 0.69 does not
+
+**Build this with yosys 0.56.** Newer yosys produces a netlist that either will
+not place or, worse, places cleanly and does not run.
+
+| yosys | nextpnr-himbaechel | result |
+|---|---|---|
+| **0.56+186** | 0.11.1-26 | **works** — places, packs, runs on hardware |
+| 0.69+62 | 0.11.1-26 | P&R fails: `unable to place cell ...states_$buf_Y of type $buf` |
+| 0.69+117 | 0.11.1-31 | identical failure — a newer nightly does **not** fix it |
+
+Measured 2026-09-22, same sources and flags, only the toolchain differing. If
+your yosys is newer than 0.56, pass the older one explicitly:
+
+```bash
+make -f Makefile.synth_tang20k prog YOSYS=/path/to/yosys-0.56
+```
+
+Yosys ≥ ~0.6x runs in buffered-normalized mode and leaves three `$buf` cells in
+`top`, on `states` (253 bits), `effective_state_value` (253 bits) and `combined`
+(16 bits) — vectors the RTL assembles from many separate per-bit drivers. They
+carry real connectivity; they are not junk to be stripped.
+
+Do not "fix" this with `techmap t:$buf`. It places and packs perfectly and the
+resulting bitstream is **dead** — `led[5]` is a free-running heartbeat outside
+reset and never blinks, because techmap deleted those 253-bit alias nets. The
+documented exit, `bufnorm -conn`, removes the buffers correctly but then breaks
+P&R on the in-package SDRAM (`Unconstrained IO:IO_sdram_dq_IOBUF_IO_9`), since
+this `.cst` deliberately constrains no SDRAM pins and himbaechel auto-assigns
+them.
+
+**On this flow, a clean P&R and a packed `.fs` prove nothing about the design.**
+Check the heartbeat LED before believing a build. Not yet reported upstream;
+`Makefile.synth_tang20k` carries the full matrix and a `BUFFIX` A/B knob
+(empty by default, deliberately).
 
 ## Running it
 
@@ -170,6 +206,10 @@ miscompute on the GW2A-18C (YosysHQ/apicula#514). It costs
 essentially nothing here.
 
 ## Known issues
+
+**Yosys newer than 0.56 does not produce a working bitstream for this design.**
+See "Toolchain versions" above — 0.69 fails P&R, and the obvious workaround
+produces a silently dead board.
 
 **The on-board BL616 USB-serial bridge is intermittent in the FPGA→host
 direction** on the unit used for bring-up. Over one session it went dead for

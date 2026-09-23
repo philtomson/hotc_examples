@@ -82,12 +82,74 @@ all: pack
 # a hierarchy check that runs first doesn't know about those cells yet and
 # errors on any design that instantiates a Gowin primitive. Same fix
 # examples/hdmi_gpu's Makefile.synth_tang20k already documents.
+# KNOWN-GOOD YOSYS: 0.56. Newer yosys is NOT usable for this design.
+#
+# Measured 2026-09-22, same sources, same flags, only the toolchain differing:
+#
+#   yosys 0.56+186                      0 $buf in top; places, packs, and RUNS
+#                                       on hardware. This is the pinned version.
+#   yosys 0.69+62                       3 $buf in top; nextpnr-himbaechel stops:
+#                                       "unable to place cell
+#                                       ...states_$buf_Y of type $buf".
+#   yosys 0.69+117 +                    IDENTICAL failure on a fresh nightly
+#   nextpnr 0.11.1-31                   with BOTH tools newer. Not fixed
+#                                       upstream -- do not assume a newer
+#                                       oss-cad-suite helps; retest cheaply
+#                                       (3 s synth + count $buf) before
+#                                       spending a build on it.
+#
+# The 3 $buf are NOT junk. They are wide alias buffers on `states` (253 bits),
+# `effective_state_value` (253 bits) and `combined` (16 bits) -- vectors the RTL
+# assembles from many separate per-bit drivers (see the per-bit always blocks in
+# IP/microcode.sv). Buffered-normalized mode inserts one buffer per such vector
+# to give it a single driving port, so they carry real connectivity.
+#
+# Workarounds tried, none acceptable:
+#
+#   bufnorm -conn / -bits   The documented exit from buffered-normalized mode,
+#                           and semantically the right operation (replace the
+#                           buffers with direct connections). Removes the $buf,
+#                           then P&R dies with
+#                           "Unconstrained IO:IO_sdram_dq_IOBUF_IO_9".
+#                           This cst deliberately constrains NO SDRAM pins: the
+#                           in-package SDRAM is auto-assigned by himbaechel, and
+#                           -conn disturbs the IO net naming that depends on.
+#                           Same error on the new nightly.
+#
+#   techmap t:$buf          Places and packs CLEANLY -- and produces a DEAD
+#                           bitstream. led[5] is a free-running heartbeat
+#                           outside reset (top.v) and does not blink; confirmed
+#                           dark with BOTH kan_tang20k.cst and
+#                           kan_tang20k_extuart.cst, against 0.56 builds on the
+#                           same cst files that do blink. It "works" by deleting
+#                           those 253-bit alias nets, which is why the result
+#                           has no clock.
+#
+#                           => On this flow a clean P&R + gowin_pack proves
+#                           NOTHING about the design. Check the heartbeat.
+#
+# 0.69 differs beyond the buffers: it infers MULT18X18/MULT9X9 DSP macros 0.56
+# does not, moves 3 flops DFF->DFFS, and shifts the LUT mix. -nodsp drops the
+# DSPs but the $buf and the LUT delta remain, so DSP inference is not the cause.
+# The hotstate IP alone (-top kan_control) shows 0 $buf on both versions -- the
+# buffers appear only once everything is flattened into top, so there is no
+# small reproducer. Root cause not isolated; not yet reported upstream.
+#
+# BUFFIX is the A/B knob that found this, and is EMPTY by default on purpose.
+# Do not enable it to "fix" a $buf P&R failure: it hides the failure rather than
+# fixing it. Use yosys 0.56:  make -f Makefile.synth_tang20k prog YOSYS=/usr/local/bin/yosys
+BUFFIX ?=
+
+# synth_gowin's -json shortcut is deliberately NOT used, so that BUFFIX can be
+# injected between mapping and JSON writeout.
 synth: $(KAN_TEMPLATE) $(UART_TEMPLATES)
 	$(TOOL_BANNER)
 	@echo "=== Yosys Gowin synthesis for $(TOP) (Tang Nano 20K) ==="
 	$(YOSYS) -ql synth_tang20k.log -p " \
 	  read_verilog -sv $(SRCS); \
-	  synth_gowin -noalu -top $(TOP) -json synth_tang20k.json; \
+	  synth_gowin -noalu -top $(TOP); \
+	  $(BUFFIX) \
+	  write_json synth_tang20k.json; \
 	  stat"
 	@echo "=== Gowin 20K synthesis done — see synth_tang20k.log ==="
 
