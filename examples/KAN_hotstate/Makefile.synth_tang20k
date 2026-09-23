@@ -117,5 +117,13 @@ prog: pack
 	$(OPENFPGALOADER) -b tangnano20k design_tang20k.fs
 	@echo "=== Programming done ==="
 
+# NOTE: in THIS repo the hotc-generated files are checked in -- that is the
+# whole point, since there is no hotc here to regenerate them. So clean_synth must
+# remove only what a build produces. The same recipe is correct in the hotc
+# source repo, where these files ARE build output, which is exactly why the
+# destructive version survived the copy. Same trap as smith_waterman's
+# `make clean` (hotc 5871e964).
+# $(BUILD) holds the UART machines' checked-in templates and .mem files; an
+# `rm -rf $(BUILD)` here took out 14 tracked files.
 clean_synth:
-	rm -rf $(BUILD) synth_tang20k.json synth_tang20k.log pnr_tang20k.json design_tang20k.fs
+	rm -f synth_tang20k.json synth_tang20k.log pnr_tang20k.json design_tang20k.fs

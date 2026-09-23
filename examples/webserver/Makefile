@@ -66,7 +66,12 @@ sim_interactive: generate
 # and simulation build output -- *_template.v/*.mem/*_symbols.toml etc. are
 # hotc's checked-in output, not regenerable without hotc, so clean leaves
 # them alone.
+# NOTE: in THIS repo the hotc-generated files are checked in -- that is the
+# whole point, since there is no hotc here to regenerate them. So clean must
+# remove only what a build produces. The same recipe is correct in the hotc
+# source repo, where these files ARE build output, which is exactly why the
+# destructive version survived the copy. Same trap as smith_waterman's
+# `make clean` (hotc 5871e964).
 clean:
 	rm -rf obj_dir webserver_sim.vcd hardware_trace.csv http_server_sim.csv
-	rm -f response_*.h response_*.mem
 

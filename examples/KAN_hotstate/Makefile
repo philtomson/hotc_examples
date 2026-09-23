@@ -68,11 +68,14 @@ wave:
 	$(VIEWER) sim_wf.vcd
 
 # Clean generated files
+# NOTE: in THIS repo the hotc-generated files are checked in -- that is the
+# whole point, since there is no hotc here to regenerate them. So clean must
+# remove only what a build produces. The same recipe is correct in the hotc
+# source repo, where these files ARE build output, which is exactly why the
+# destructive version survived the copy. Same trap as smith_waterman's
+# `make clean` (hotc 5871e964).
 clean:
 	rm -rf obj_dir obj_dir_ack_probe obj_dir_rw_probe obj_dir_fastload sim_wf.vcd hardware_trace.csv $(MODULE)_sim.csv
-	rm -f $(MODULE)_tb.v $(MODULE)_template.v $(MODULE)_params.vh
-	rm -f $(MODULE)_smdata.mem $(MODULE)_vardata.mem $(MODULE)_switchdata.mem $(MODULE)_timdata.mem
-	rm -f $(MODULE)_symbols.toml sim_main.cpp verilator_sim.h
 
 .PHONY: all  hw_sim sw_sim compare validate lint wave clean
 # ---------------------------------------------------------------------------

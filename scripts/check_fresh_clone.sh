@@ -18,7 +18,7 @@
 # So this script clones from git -- NOT the working directory -- into a temp dir
 # and drives each example the way a newcomer would.
 #
-#   ./scripts/check_fresh_clone.sh            # fast: default goal, lint, includes
+#   ./scripts/check_fresh_clone.sh            # fast: default goal, lint, includes, cleans
 #   ./scripts/check_fresh_clone.sh --synth    # also build a bitstream per example
 #   ./scripts/check_fresh_clone.sh --keep     # leave the clone for inspection
 #
@@ -90,7 +90,39 @@ for d in "$CLONE"/examples/*/; do
 done
 echo
 
-# ---- 3. optionally build a real bitstream --------------------------------
+# ---- 3. no clean target may delete a tracked file -------------------------
+# In the hotc source repo the generated files ARE build output and cleaning them
+# is right. Here they are checked in -- that is the whole point of this repo --
+# so the identical recipe destroys source. Three targets did exactly that:
+# KAN_hotstate's `clean` (8 files), webserver's `clean` (8), and
+# KAN_hotstate's `clean_synth`, whose `rm -rf $(BUILD)` took out 14 including the
+# UART machines' templates. Nothing here can regenerate them.
+#
+# Note the restore is `git checkout -- <deleted paths>`, NOT `git checkout -- .`:
+# the broad form also reverts anything else under test, which silently
+# invalidated this very check twice while it was being written.
+echo "=== clean targets ==="
+for d in "$CLONE"/examples/*/; do
+  name="$(basename "$d")"
+  for mk in "$d"Makefile "$d"Makefile.synth_*; do
+    [ -f "$mk" ] || continue
+    b="$(basename "$mk")"
+    for tgt in $(grep -oE '^clean[a-z_]*:' "$mk" 2>/dev/null | tr -d ':'); do
+      (cd "$d" && timeout 300 make -f "$b" "$tgt" >/dev/null 2>&1)
+      gone="$(git -C "$CLONE" status --porcelain | awk '/^ D/ {print $2}')"
+      if [ -n "$gone" ]; then
+        bad "$name" "$b $tgt deletes $(printf '%s' "$gone" | wc -l) tracked file(s)"
+        printf '%s' "$gone" | head -3 | sed 's|^|                   |'
+        git -C "$CLONE" checkout -q -- $gone 2>/dev/null
+      else
+        ok "$name" "$b $tgt keeps tracked files"
+      fi
+    done
+  done
+done
+echo
+
+# ---- 4. optionally build a real bitstream --------------------------------
 if [ "$SYNTH" = 1 ]; then
   echo "=== synthesis (one board per example) ==="
   if ! command -v yosys >/dev/null 2>&1; then
