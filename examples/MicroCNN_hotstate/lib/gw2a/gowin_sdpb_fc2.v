@@ -1,74 +1,37 @@
-//Copyright (C)2014-2025 Gowin Semiconductor Corporation.
-//All rights reserved.
-//File Title: IP file
-//Tool Version: V1.9.11.03 Education
-//Part Number: GW2AR-LV18QN88C8/I7
-//Device: GW2AR-18
-//Device Version: C
-//Created Time: Thu Jul 23 15:36:08 2026
-
-module gowin_sdpb_fc2 (dout, clka, cea, reseta, clkb, ceb, resetb, oce, ada, din, adb);
-
-output [63:0] dout;
-input clka;
-input cea;
-input reseta;
-input clkb;
-input ceb;
-input resetb;
-input oce;
-input [4:0] ada;
-input [7:0] din;
-input [1:0] adb;
-
-wire gw_gnd;
-
-assign gw_gnd = 1'b0;
-
-SDPB sdpb_inst_0 (
-    .DO({dout[59:56],dout[51:48],dout[43:40],dout[35:32],dout[27:24],dout[19:16],dout[11:8],dout[3:0]}),
-    .CLKA(clka),
-    .CEA(cea),
-    .RESETA(reseta),
-    .CLKB(clkb),
-    .CEB(ceb),
-    .RESETB(resetb),
-    .OCE(oce),
-    .BLKSELA({gw_gnd,gw_gnd,gw_gnd}),
-    .BLKSELB({gw_gnd,gw_gnd,gw_gnd}),
-    .ADA({gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,ada[4:0],gw_gnd,gw_gnd}),
-    .DI({gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,din[3:0]}),
-    .ADB({gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,adb[1:0],gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd})
+// Tang Nano 20K (GW2A): FC2 activation buffer for fc2_buffer_ram.sv.
+// Same organisation as gowin_sdpb_fc1.v, smaller: 32 bytes written one at a
+// time, read back as 4 x 64-bit words (byte k of word w = write address
+// {w, k}); low nibbles in one SDPB, high nibbles in the other.
+module gowin_sdpb_fc2 (
+    output [63:0] dout,
+    input         clka, cea, reseta,
+    input         clkb, ceb, resetb, oce,
+    input  [4:0]  ada,
+    input  [7:0]  din,
+    input  [1:0]  adb
 );
+    wire [31:0] lo, hi;
 
-defparam sdpb_inst_0.READ_MODE = 1'b0;
-defparam sdpb_inst_0.BIT_WIDTH_0 = 4;
-defparam sdpb_inst_0.BIT_WIDTH_1 = 32;
-defparam sdpb_inst_0.BLK_SEL_0 = 3'b000;
-defparam sdpb_inst_0.BLK_SEL_1 = 3'b000;
-defparam sdpb_inst_0.RESET_MODE = "SYNC";
+    genvar k;
+    generate for (k = 0; k < 8; k = k + 1) begin : g_byte
+        assign dout[8*k +: 8] = {hi[4*k +: 4], lo[4*k +: 4]};
+    end endgenerate
 
-SDPB sdpb_inst_1 (
-    .DO({dout[63:60],dout[55:52],dout[47:44],dout[39:36],dout[31:28],dout[23:20],dout[15:12],dout[7:4]}),
-    .CLKA(clka),
-    .CEA(cea),
-    .RESETA(reseta),
-    .CLKB(clkb),
-    .CEB(ceb),
-    .RESETB(resetb),
-    .OCE(oce),
-    .BLKSELA({gw_gnd,gw_gnd,gw_gnd}),
-    .BLKSELB({gw_gnd,gw_gnd,gw_gnd}),
-    .ADA({gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,ada[4:0],gw_gnd,gw_gnd}),
-    .DI({gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,din[7:4]}),
-    .ADB({gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd,adb[1:0],gw_gnd,gw_gnd,gw_gnd,gw_gnd,gw_gnd})
-);
+    SDPB #(.READ_MODE(1'b0), .BIT_WIDTH_0(4), .BIT_WIDTH_1(32),
+           .BLK_SEL_0(3'b000), .BLK_SEL_1(3'b000), .RESET_MODE("SYNC")) u_lo (
+        .DO(lo), .DI({28'd0, din[3:0]}),
+        .ADA({7'd0, ada, 2'b00}), .ADB({7'd0, adb, 5'b00000}),
+        .CLKA(clka), .CEA(cea), .RESETA(reseta),
+        .CLKB(clkb), .CEB(ceb), .RESETB(resetb), .OCE(oce),
+        .BLKSELA(3'b000), .BLKSELB(3'b000)
+    );
 
-defparam sdpb_inst_1.READ_MODE = 1'b0;
-defparam sdpb_inst_1.BIT_WIDTH_0 = 4;
-defparam sdpb_inst_1.BIT_WIDTH_1 = 32;
-defparam sdpb_inst_1.BLK_SEL_0 = 3'b000;
-defparam sdpb_inst_1.BLK_SEL_1 = 3'b000;
-defparam sdpb_inst_1.RESET_MODE = "SYNC";
-
-endmodule //gowin_sdpb_fc2
+    SDPB #(.READ_MODE(1'b0), .BIT_WIDTH_0(4), .BIT_WIDTH_1(32),
+           .BLK_SEL_0(3'b000), .BLK_SEL_1(3'b000), .RESET_MODE("SYNC")) u_hi (
+        .DO(hi), .DI({28'd0, din[7:4]}),
+        .ADA({7'd0, ada, 2'b00}), .ADB({7'd0, adb, 5'b00000}),
+        .CLKA(clka), .CEA(cea), .RESETA(reseta),
+        .CLKB(clkb), .CEB(ceb), .RESETB(resetb), .OCE(oce),
+        .BLKSELA(3'b000), .BLKSELB(3'b000)
+    );
+endmodule

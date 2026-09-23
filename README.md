@@ -190,8 +190,6 @@ This repository is under two licenses, split by directory:
   `micro_cnn_blood.pth`, `golden_benchmark.py` and `uart_medmnist_loader.py`
   come from [SweiryDev/MicroCNN-TangNano20k](https://github.com/SweiryDev/MicroCNN-TangNano20k),
   which does not state a licence. They are NOT covered by the MIT grant above.
-  The same goes for `lib/gw2a/` and `tang20k.cst`, which are Gowin IDE output
-  from that repo and carry Gowin's own copyright header.
 
 If you're unsure which applies to a given file, check which directory it's
 in — each CC-BY-NC-ND directory's own `LICENSE.md` is the authoritative

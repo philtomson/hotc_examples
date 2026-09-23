@@ -136,8 +136,8 @@ predicted class as ASCII `'0'`..`'7'`.
 - **Clock:** the 27 MHz oscillator through a Gowin `rPLL` to 30 MHz.
 - **Pins:** the on-board USB UART (pins 69/70), button on pin 88 as reset,
   and the class result on the on-board LEDs (active low).
-- **Primitives:** the original design's Gowin IP — `MULT9X9`,
-  `MULTALU18X18`, mixed-width `SDPB`, `rPLL` — in `lib/gw2a/`.
+- **Primitives:** the original design's hard blocks — `MULT9X9`,
+  `MULTALU18X18`, mixed-width `SDPB`, `rPLL` — instantiated by `lib/gw2a/`.
 - **Resources (Gowin):** about 4,500 logic cells (22%), 1,800 registers
   (12%), 36 `MULT9X9`, 8 `MULTALU18X18`.
 
@@ -153,7 +153,7 @@ primitive modules (`lib/gw2a/` or `lib/gw5a/`) and the board top differ.
 | `top_hotstate.sv`, `npu_top_hotstate.sv` | Wiring between the hotstate machine and the datapath |
 | `top_primer25k.sv`, `primer25k.cst` | Tang Primer 25K board wrapper and pins |
 | `tang20k.cst`, `build_tang20k.tcl` | Tang Nano 20K pins and Gowin build script (`top_hotstate.sv` is the 20K top) |
-| `lib/` | Datapath RTL from MicroCNN-TangNano20k; `lib/gw2a/` holds its Gowin IP wrappers (20K), `lib/gw5a/` their GW5A replacements (25K) |
+| `lib/` | Datapath RTL from MicroCNN-TangNano20k; `lib/gw2a/` wraps the GW2A hard primitives it uses (20K), `lib/gw5a/` maps the same modules onto GW5A (25K) |
 | `hardware_roms/` | Quantized weights and biases, loaded by `$readmemh` |
 | `uart_medmnist_loader.py` | Sends one BloodMNIST image to the board and reads back the class |
 | `golden_benchmark.py`, `micro_cnn_blood.pth` | Quantized Python reference model and its trained weights |
@@ -169,9 +169,11 @@ come from
 Local changes to those files: the four `*_param_rom.sv` load their ROMs
 from a relative path instead of an absolute one, `maxpool2x2.sv` and
 `tdm_npu_router.sv` carry fixes and debug taps made while bringing up the
-hotstate controller, `ws_conv_core_gowin.sv` exposes two debug taps, and
-`lib/gw2a/gowin_rpll.v` exposes the PLL's divided output. `lib/gw2a/` is
-Gowin IP Core Generator output from that repo.
+hotstate controller, and `ws_conv_core_gowin.sv` exposes two debug taps.
+`lib/gw2a/` and `tang20k.cst` are written for this repo: they instantiate
+and configure the same Gowin primitives, with the same parameters and pins,
+as the Gowin IP Core Generator output in the upstream design (the
+synthesized primitives and their parameters are identical).
 The hotstate controller (`main_controller.c` and everything generated
 from it), the top-level wiring, the Tang Primer 25K port and `lib/gw5a/`
 are new.
