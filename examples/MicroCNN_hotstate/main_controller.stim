@@ -1,0 +1,6 @@
+# Stimulus file for main_controller
+# Format: CYCLE var=value var=value ...
+# Example: 0 a0=1 a1=0
+
+# Initialize inputs
+0

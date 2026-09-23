@@ -1,0 +1,25 @@
+// Tang Primer 25K (GW5A-25A) pins for top_primer25k.sv. Same physical pins as
+// examples/Tsetlin_hotstate_uart/tm_primer25k_uart.cst, hardware-verified
+// 2026-09-09 (see boards/tang_primer_25k.json):
+//   E2  50 MHz oscillator      B3  FPGA_UART_RX      C3  FPGA_UART_TX
+//   H11 user button S1 (rst_n)
+// led[2:0] go to spare expansion-header pins; the dock has no user LEDs.
+
+IO_LOC  "clk" E2;
+IO_PORT "clk" IO_TYPE=LVCMOS33;
+
+IO_LOC  "rst_n" H11;
+IO_PORT "rst_n" IO_TYPE=LVCMOS33 PULL_MODE=UP;
+
+IO_LOC  "uart_rxd" B3;
+IO_PORT "uart_rxd" IO_TYPE=LVCMOS33 PULL_MODE=UP;
+
+IO_LOC  "uart_txd" C3;
+IO_PORT "uart_txd" IO_TYPE=LVCMOS33 DRIVE=8;
+
+IO_LOC  "led[0]" H8;
+IO_PORT "led[0]" IO_TYPE=LVCMOS33 DRIVE=8;
+IO_LOC  "led[1]" H7;
+IO_PORT "led[1]" IO_TYPE=LVCMOS33 DRIVE=8;
+IO_LOC  "led[2]" G7;
+IO_PORT "led[2]" IO_TYPE=LVCMOS33 DRIVE=8;

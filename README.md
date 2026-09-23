@@ -67,6 +67,7 @@ examples/
   gol-hotstate/              Conway's Game of Life, rendered to an SPI LCD
   webserver/                 HTTP web server with browser LED control, over UART
   KAN_hotstate/              Kolmogorov-Arnold Network MNIST classifier (Tang Nano 20K)
+  MicroCNN_hotstate/         CNN blood-cell classifier, control plane in C (Tang Primer 25K)
 tools.mk                     shared synthesis tool-path overrides
 ```
 
@@ -151,6 +152,13 @@ renamed upstream.
   board's LEDs. Verified 100/100 in simulation **and** 100/100 on real hardware.
   Includes `draw_digit_kan.py`, an interactive GUI to draw a digit and read the
   answer off the board. Tang Nano 20K only (needs the in-package SDRAM).
+- **[`MicroCNN_hotstate`](examples/MicroCNN_hotstate/)** — a small
+  convolutional neural network classifying BloodMNIST blood-cell images. The
+  datapath is hand-written SystemVerilog; everything that sequences it — what
+  would normally be a hierarchy of hand-written FSMs — is one hotc-compiled C
+  program. Verified 52/52 against the quantized Python reference model on real
+  hardware. Tang Primer 25K only; needs a yosys with the slang plugin (the OSS
+  CAD Suite build has it).
 - **[`webserver`](examples/webserver/)** — a small HTTP server, served
   entirely from compiled hotstate microcode, with a browser-based dashboard
   to toggle on-board LEDs. Talks over plain UART via a host-side TCP

@@ -1,0 +1,123 @@
+# MicroCNN_hotstate -- Tang Primer 25K (GW5A-25A) bitstream, open-source flow:
+# yosys (with the yosys-slang plugin) -> nextpnr-himbaechel -> gowin_pack ->
+# openFPGALoader. No hotc needed: the generated microcode is checked in.
+#
+#   make -f Makefile.synth_primer25k pack        synth + P&R + bitstream
+#   make -f Makefile.synth_primer25k prog        ... and load it into SRAM
+#   make -f Makefile.synth_primer25k prog_verified   load the checked-in
+#                                                verified bitstream, no build
+#
+# yosys MUST have the slang plugin (`read_slang`): the datapath RTL uses
+# SystemVerilog unpacked-array ports that yosys's own frontend cannot parse.
+# The OSS CAD Suite build includes it.
+#
+# The hotstate engine and the generated template go through yosys's own
+# Verilog frontend, which keeps the template's parameter overrides; the rest
+# goes through slang. -D NO_RPLL -D SYS_CLK_HZ=... run the design straight off
+# the dock's 50 MHz oscillator (GW5A has no rPLL) with the UART divisors to
+# match. lib/gw5a/ supplies the multiplier/RAM modules the datapath
+# instantiates, mapped onto this family's primitives.
+SHELL := /bin/bash
+.SHELLFLAGS := -eo pipefail -c
+
+-include ../../tools.mk
+-include ../../local.mk
+
+IP_DIR       := ../../IP
+MODULE       := main_controller
+BUILD        := build_primer25k
+GOWIN_DEVICE := GW5A-LV25MG121NES
+GOWIN_FAMILY := GW5A-25A
+CLK_HZ       := 50_000_000
+CLK_MHZ      := 50
+TOP          := top_primer25k
+CST          := primer25k.cst
+
+# Legacy Verilog frontend: GW5A primitive modules, hotstate engine, template
+VLOG = lib/gw5a/gowin_mult.v \
+       lib/gw5a/dsp_multalu_accum.v \
+       lib/gw5a/gowin_sdpb.v \
+       $(IP_DIR)/hotstate.sv $(IP_DIR)/microcode.sv $(IP_DIR)/control.sv \
+       $(IP_DIR)/next_address.sv $(IP_DIR)/variable.sv $(IP_DIR)/switch.sv \
+       $(IP_DIR)/stack.sv $(IP_DIR)/timer.sv \
+       $(MODULE)_template.v
+
+# slang frontend: datapath + tops
+RTL = lib/spatial_3x3_mac_gowin.sv \
+      lib/ws_conv_core_gowin.sv \
+      lib/tdm_npu_router.sv \
+      lib/unified_line_buffer.sv \
+      lib/maxpool2x2.sv \
+      lib/argmax_layer.sv \
+      lib/conv1_param_rom.sv \
+      lib/conv2_param_rom.sv \
+      lib/fc1_param_rom.sv \
+      lib/fc2_param_rom.sv \
+      lib/fc1_buffer_ram.sv \
+      lib/fc2_buffer_ram.sv \
+      lib/fc1_reduction_tree.sv \
+      lib/fc2_reduction_tree.sv \
+      lib/fc_npu_array_gowin.sv \
+      lib/fc_tdm_router.sv \
+      lib/tdm_fc_router.sv \
+      lib/img_ram.sv \
+      lib/conv1_to_conv2_router.sv \
+      lib/conv2_line_buffer_wrapper.sv \
+      lib/single_channel_line_buffer.sv \
+      lib/uart_rx.sv \
+      lib/uart_tx.sv \
+      lib/soc_controller.sv \
+      lib/reset_sync.sv \
+      npu_top_hotstate.sv \
+      top_hotstate.sv \
+      top_primer25k.sv
+
+.PHONY: synth pnr pack prog prog_verified clean_synth
+
+# Run from this directory: the ROM modules' $readmemh("hardware_roms/...")
+# and the template's .mem paths are relative to it.
+synth: | $(BUILD)
+	$(TOOL_BANNER)
+	@$(YOSYS) -m slang -p 'help read_slang' >/dev/null 2>&1 || { \
+	  echo "ERROR: '$(YOSYS)' has no slang plugin (read_slang), which this design needs."; \
+	  echo "       Point YOSYS at an OSS CAD Suite yosys, e.g."; \
+	  echo "       make -f Makefile.synth_primer25k pack YOSYS=/path/to/oss-cad-suite/bin/yosys"; \
+	  exit 1; }
+	$(YOSYS) -m slang -p " \
+		read_verilog -sv $(VLOG); \
+		read_slang --allow-use-before-declare -D NO_RPLL -D SYS_CLK_HZ=$(CLK_HZ) $(RTL); \
+		synth_gowin -family gw5a -nolutram -top $(TOP) -json $(BUILD)/synth_primer25k.json; \
+		stat \
+	" 2>&1 | tee $(BUILD)/synth_primer25k.log
+
+# --timing-allow-fail: nextpnr-himbaechel's hold model reports small hold
+# violations on this family (the Tsetlin_hotstate_uart 25K flow carries the same
+# flag). Setup timing passes with margin -- check the "Max frequency" lines in
+# pnr_primer25k.log against $(CLK_MHZ) MHz.
+pnr: synth
+	$(NEXTPNR_HIMB) \
+		--device $(GOWIN_DEVICE) \
+		--vopt family=$(GOWIN_FAMILY) \
+		--json $(BUILD)/synth_primer25k.json \
+		--write $(BUILD)/pnr_primer25k.json \
+		--vopt cst=$(CST) \
+		--freq $(CLK_MHZ) \
+		--timing-allow-fail \
+		2>&1 | tee $(BUILD)/pnr_primer25k.log
+
+pack: pnr
+	$(GOWIN_PACK) -d $(GOWIN_FAMILY) -o $(BUILD)/design_primer25k.fs $(BUILD)/pnr_primer25k.json 2>&1 | tee $(BUILD)/pack.log
+	@echo "=== Bitstream: $(BUILD)/design_primer25k.fs ==="
+
+prog: pack
+	$(OPENFPGALOADER) -b tangprimer25k $(BUILD)/design_primer25k.fs
+
+prog_verified:
+	$(OPENFPGALOADER) -b tangprimer25k verified_bitstreams/top_primer25k_52of52.fs
+
+$(BUILD):
+	mkdir -p $(BUILD)
+
+# Only build output lives in $(BUILD); everything tracked is outside it.
+clean_synth:
+	rm -rf $(BUILD)

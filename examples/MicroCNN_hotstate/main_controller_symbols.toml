@@ -1,0 +1,112 @@
+[metadata]
+generated_from = "main"
+variable_count = 46
+comparator_bypass = true
+cmp_varsel_base = 3
+num_comparators = 21
+
+[state_variables]
+"0" = { name = "layer_phase", type = "output", initial_value = 0, width = 5, is_unsigned = true }
+"5" = { name = "c1_pixel_cnt", type = "output", initial_value = 0, width = 10, is_unsigned = true }
+"15" = { name = "c1_filter_cnt", type = "output", initial_value = 0, width = 3, is_unsigned = true }
+"18" = { name = "c1_flush_cnt", type = "output", initial_value = 0, width = 5, is_unsigned = true }
+"23" = { name = "c2_pixel_cnt", type = "output", initial_value = 0, width = 8, is_unsigned = true }
+"31" = { name = "c2_filter_cnt", type = "output", initial_value = 0, width = 4, is_unsigned = true }
+"35" = { name = "c2_lb_row", type = "output", initial_value = 0, width = 5, is_unsigned = true }
+"40" = { name = "c2_lb_col", type = "output", initial_value = 0, width = 5, is_unsigned = true }
+"45" = { name = "fc1_chunk_cnt", type = "output", initial_value = 0, width = 6, is_unsigned = true }
+"51" = { name = "fc1_neuron_cnt", type = "output", initial_value = 0, width = 5, is_unsigned = true }
+"56" = { name = "fc1_drain_cnt", type = "output", initial_value = 0, width = 4, is_unsigned = true }
+"60" = { name = "fc2_chunk_cnt", type = "output", initial_value = 0, width = 2, is_unsigned = true }
+"62" = { name = "fc2_neuron_cnt", type = "output", initial_value = 0, width = 3, is_unsigned = true }
+"65" = { name = "fc2_flush_cnt", type = "output", initial_value = 0, width = 4, is_unsigned = true }
+"69" = { name = "conv1_start_latched", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"70" = { name = "img_en", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"71" = { name = "weight_en", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"72" = { name = "bias_en", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"73" = { name = "shift_en", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"74" = { name = "compute_en", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"75" = { name = "accumulate", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"76" = { name = "chunk_sel", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"77" = { name = "mult_ce", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"78" = { name = "mult_clear", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"79" = { name = "param_en", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"80" = { name = "fc1_valid_out", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"81" = { name = "fc2_valid_out", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"82" = { name = "img_addr", type = "output", initial_value = 0, width = 10, is_unsigned = true }
+"92" = { name = "filter_idx", type = "output", initial_value = 0, width = 4, is_unsigned = true }
+"96" = { name = "ram_raddr", type = "output", initial_value = 0, width = 8, is_unsigned = true }
+"104" = { name = "fc1_ram_raddr", type = "output", initial_value = 0, width = 6, is_unsigned = true }
+"110" = { name = "fc1_weight_raddr", type = "output", initial_value = 0, width = 11, is_unsigned = true }
+"121" = { name = "fc1_bias_raddr", type = "output", initial_value = 0, width = 5, is_unsigned = true }
+"126" = { name = "fc2_ram_raddr", type = "output", initial_value = 0, width = 2, is_unsigned = true }
+"128" = { name = "fc2_weight_raddr", type = "output", initial_value = 0, width = 5, is_unsigned = true }
+"133" = { name = "fc2_bias_raddr", type = "output", initial_value = 0, width = 3, is_unsigned = true }
+"136" = { name = "layer_state", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"137" = { name = "npu_sleep", type = "output", initial_value = 1, width = 1, is_unsigned = false }
+"138" = { name = "npu_done", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+
+[input_variables]
+"0" = { name = "layer_phase", type = "input", width = 5, start_bit = 0, is_reg = true, referenced = true, compacted_start_bit = 0 }
+"1" = { name = "conv1_start_latched", type = "input", width = 1, start_bit = 5, is_reg = true, referenced = true, compacted_start_bit = 5 }
+
+[switches]
+"0" = { input_var_index = 0 }
+
+[external_inputs]
+"0" = { name = "conv1_layer_done", type = "external_input", width = 1 }
+"1" = { name = "conv2_layer_done", type = "external_input", width = 1 }
+"2" = { name = "fc1_layer_done", type = "external_input", width = 1 }
+"3" = { name = "fc2_layer_done", type = "external_input", width = 1 }
+"4" = { name = "conv1_start", type = "external_input", width = 1 }
+
+[timers]
+
+[expressions]
+"1" = { expr = "conv1_start", result_width = 1, state_lo = 69, state_hi = 69 }
+"2" = { expr = "c1_filter_cnt", result_width = 4, state_lo = 92, state_hi = 95 }
+"3" = { expr = "c1_pixel_cnt", result_width = 10, state_lo = 82, state_hi = 91 }
+"4" = { expr = "(((c1_pixel_cnt) + (1)) & 1023)", result_width = 10, state_lo = 5, state_hi = 14 }
+"5" = { expr = "(((c1_flush_cnt) + (1)) & 31)", result_width = 5, state_lo = 18, state_hi = 22 }
+"6" = { expr = "(((c1_filter_cnt) + (1)) & 7)", result_width = 3, state_lo = 15, state_hi = 17 }
+"7" = { expr = "c2_filter_cnt", result_width = 4, state_lo = 92, state_hi = 95 }
+"8" = { expr = "c2_pixel_cnt", result_width = 8, state_lo = 96, state_hi = 103 }
+"9" = { expr = "(((c2_lb_row) + (1)) & 31)", result_width = 5, state_lo = 35, state_hi = 39 }
+"10" = { expr = "(((c2_lb_col) + (1)) & 31)", result_width = 5, state_lo = 40, state_hi = 44 }
+"11" = { expr = "(((c2_pixel_cnt) + (1)) & 255)", result_width = 8, state_lo = 23, state_hi = 30 }
+"12" = { expr = "(((c2_filter_cnt) + (1)) & 15)", result_width = 4, state_lo = 31, state_hi = 34 }
+"13" = { expr = "fc1_chunk_cnt", result_width = 6, state_lo = 104, state_hi = 109 }
+"14" = { expr = "((((((fc1_neuron_cnt) * (50)) & 2047)) + (fc1_chunk_cnt)) & 2047)", result_width = 11, state_lo = 110, state_hi = 120 }
+"15" = { expr = "fc1_neuron_cnt", result_width = 5, state_lo = 121, state_hi = 125 }
+"16" = { expr = "(((fc1_chunk_cnt) + (1)) & 63)", result_width = 6, state_lo = 45, state_hi = 50 }
+"17" = { expr = "(((fc1_drain_cnt) + (1)) & 15)", result_width = 4, state_lo = 56, state_hi = 59 }
+"18" = { expr = "(((fc1_neuron_cnt) + (1)) & 31)", result_width = 5, state_lo = 51, state_hi = 55 }
+"19" = { expr = "fc2_chunk_cnt", result_width = 2, state_lo = 126, state_hi = 127 }
+"20" = { expr = "((((((fc2_neuron_cnt) << (2)) & 31)) + (fc2_chunk_cnt)) & 31)", result_width = 5, state_lo = 128, state_hi = 132 }
+"21" = { expr = "fc2_neuron_cnt", result_width = 3, state_lo = 133, state_hi = 135 }
+"22" = { expr = "(((fc2_chunk_cnt) + (1)) & 3)", result_width = 2, state_lo = 60, state_hi = 61 }
+"23" = { expr = "(((fc2_flush_cnt) + (1)) & 15)", result_width = 4, state_lo = 65, state_hi = 68 }
+"24" = { expr = "(((fc2_neuron_cnt) + (1)) & 7)", result_width = 3, state_lo = 62, state_hi = 64 }
+
+[comparators]
+"0" = { op = "==", lhs = "c1_pixel_cnt", lhs_width = 10, lhs_is_state = true, rhs_value = 783, unsigned_cmp = true, bypass_varsel_id = 3 }
+"1" = { op = "==", lhs = "c1_flush_cnt", lhs_width = 5, lhs_is_state = true, rhs_value = 15, unsigned_cmp = true, bypass_varsel_id = 4 }
+"2" = { op = "==", lhs = "c1_filter_cnt", lhs_width = 3, lhs_is_state = true, rhs_value = 7, unsigned_cmp = true, bypass_varsel_id = 5 }
+"3" = { op = ">=", lhs = "c2_lb_row", lhs_width = 5, lhs_is_state = true, rhs_value = 2, unsigned_cmp = true, bypass_varsel_id = 6 }
+"4" = { op = ">=", lhs = "c2_lb_col", lhs_width = 5, lhs_is_state = true, rhs_value = 2, unsigned_cmp = true, bypass_varsel_id = 7 }
+"5" = { is_compound = true, compound_left_idx = 3, compound_right_idx = 4, compound_negate = false, compound_op = "&&", bypass_varsel_id = 8 }
+"6" = { op = "==", lhs = "c2_lb_col", lhs_width = 5, lhs_is_state = true, rhs_value = 12, unsigned_cmp = true, bypass_varsel_id = 9 }
+"7" = { op = "==", lhs = "c2_pixel_cnt", lhs_width = 8, lhs_is_state = true, rhs_value = 169, unsigned_cmp = true, bypass_varsel_id = 10 }
+"8" = { op = "==", lhs = "c2_filter_cnt", lhs_width = 4, lhs_is_state = true, rhs_value = 15, unsigned_cmp = true, bypass_varsel_id = 11 }
+"9" = { op = "==", lhs = "fc1_chunk_cnt", lhs_width = 6, lhs_is_state = true, rhs_value = 49, unsigned_cmp = true, bypass_varsel_id = 12 }
+"10" = { op = "==", lhs = "fc1_drain_cnt", lhs_width = 4, lhs_is_state = true, rhs_value = 0, unsigned_cmp = true, bypass_varsel_id = 13 }
+"11" = { op = "==", lhs = "fc1_drain_cnt", lhs_width = 4, lhs_is_state = true, rhs_value = 1, unsigned_cmp = true, bypass_varsel_id = 14 }
+"12" = { op = "==", lhs = "fc1_drain_cnt", lhs_width = 4, lhs_is_state = true, rhs_value = 2, unsigned_cmp = true, bypass_varsel_id = 15 }
+"13" = { op = "==", lhs = "fc1_drain_cnt", lhs_width = 4, lhs_is_state = true, rhs_value = 15, unsigned_cmp = true, bypass_varsel_id = 16 }
+"14" = { op = "==", lhs = "fc1_neuron_cnt", lhs_width = 5, lhs_is_state = true, rhs_value = 31, unsigned_cmp = true, bypass_varsel_id = 17 }
+"15" = { op = "==", lhs = "fc2_chunk_cnt", lhs_width = 2, lhs_is_state = true, rhs_value = 3, unsigned_cmp = true, bypass_varsel_id = 18 }
+"16" = { op = "==", lhs = "fc2_flush_cnt", lhs_width = 4, lhs_is_state = true, rhs_value = 0, unsigned_cmp = true, bypass_varsel_id = 19 }
+"17" = { op = "==", lhs = "fc2_flush_cnt", lhs_width = 4, lhs_is_state = true, rhs_value = 1, unsigned_cmp = true, bypass_varsel_id = 20 }
+"18" = { op = "==", lhs = "fc2_flush_cnt", lhs_width = 4, lhs_is_state = true, rhs_value = 2, unsigned_cmp = true, bypass_varsel_id = 21 }
+"19" = { op = "==", lhs = "fc2_flush_cnt", lhs_width = 4, lhs_is_state = true, rhs_value = 15, unsigned_cmp = true, bypass_varsel_id = 22 }
+"20" = { op = "==", lhs = "fc2_neuron_cnt", lhs_width = 3, lhs_is_state = true, rhs_value = 7, unsigned_cmp = true, bypass_varsel_id = 23 }

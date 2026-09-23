@@ -1,0 +1,4 @@
+# Kick off inference from IDLE by holding conv1_start high for a window
+# (the real hardware holds it ~8 cycles; the IDLE poll loop is 2 cycles).
+0 conv1_start=1
+20 conv1_start=0
