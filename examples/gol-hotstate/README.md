@@ -61,6 +61,43 @@ Sipeed Tang Nano 9K (Gowin GW1NR-LV9QN88PC6/I5), pinned out in `lcd114.cst`:
 instance; everything else (`sclk`, `mosi`, `cs_n`, `dc`, `lcd_resetn`) maps
 straight through to the ST7789 panel.
 
+## Device usage (GW1NR-LV9QN88PC6/I5)
+
+Measured 2026-09-22 from `nextpnr-himbaechel`'s own post-route report, on the
+bitstream that runs on the board. Zero-use resource classes omitted.
+
+| Resource | Used | Available | Utilisation |
+|---|---:|---:|---:|
+| LUT4 | 1,775 | 8,640 | 20% |
+| DFF | 334 | 6,480 | 5% |
+| ALU | 304 | 6,480 | 4% |
+| **BSRAM** | **13** | **26** | **50%** |
+| MUX2_LUT5 | 412 | 4,320 | 9% |
+| MUX2_LUT6 | 181 | 2,160 | 8% |
+| MUX2_LUT7 | 75 | 1,080 | 6% |
+| MUX2_LUT8 | 34 | 1,080 | 3% |
+| RAM16SDP4 | 3 | 270 | 1% |
+| MULT18X18 | 1 | 20 | 5% |
+| MULT9X9 | 1 | 40 | 2% |
+| IOB | 8 | 276 | 2% |
+
+**BSRAM is the binding resource at 50%** — the two grid generations plus the
+microcode and variable tables. Logic is nowhere near full: a design twice this
+size would still fit the LUT budget but would not fit the block RAM.
+
+Timing: post-route **Fmax 59.72 MHz** on `inst_gol.clk`, against the 27 MHz
+board oscillator the design actually runs at — roughly 2.2x margin. (nextpnr
+reports "PASS at 12.00 MHz"; 12 MHz is just its default target for an
+*unconstrained* clock, not a requirement of this design.)
+
+Unlike the Tang Nano 20K examples in this repo, this flow does **not** pass
+`-noalu` — hence the 304 ALU cells. The apicula ALU miscompute
+(YosysHQ/apicula#514) is specific to the GW2A-18C; the GW1N-9C is unaffected.
+
+Toolchain for these numbers: yosys 0.69+62, nextpnr-himbaechel 0.11.1-26,
+`gowin_pack`. Unlike KAN_hotstate on the 20K, gol-hotstate synthesizes and runs
+correctly on yosys 0.69 — that problem is design- and device-specific.
+
 ## Algorithm (`gol.c`)
 
 * **Grid:** two double-buffered writable BRAMs, `grid0[1024]`/`grid1[1024]`
