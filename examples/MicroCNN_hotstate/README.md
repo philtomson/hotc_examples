@@ -47,6 +47,8 @@ Requirements beyond the repo-wide ones in the top-level README:
   SystemVerilog unpacked-array ports that yosys's own frontend cannot
   parse. The OSS CAD Suite yosys includes slang; a distro or hand-built
   yosys often does not, and the Makefile stops with a clear message if so.
+  Point `YOSYS_SLANG` at one that does; it also works from the environment,
+  e.g. `YOSYS_SLANG=/path/to/oss-cad-suite/bin/yosys ./scripts/check_fresh_clone.sh --synth`.
 - For the host scripts: `pyserial`, `numpy`, `torch` and `medmnist`
   (`pip install pyserial numpy torch medmnist`). The first run downloads
   the BloodMNIST dataset.
@@ -59,8 +61,9 @@ make -f Makefile.synth_primer25k prog_verified
 
 # ...or build your own (about 2 minutes) and load it
 make -f Makefile.synth_primer25k prog
-#   (add YOSYS=/path/to/oss-cad-suite/bin/yosys if the yosys on your PATH
-#    has no slang plugin)
+#   (add YOSYS_SLANG=/path/to/oss-cad-suite/bin/yosys if the yosys on your
+#    PATH has no slang plugin -- a separate variable, so YOSYS for the other
+#    examples is left alone)
 
 # Classify a test image on the FPGA, and through the Python reference model
 make hw-infer  IDX=26 PORT=/dev/ttyUSB1

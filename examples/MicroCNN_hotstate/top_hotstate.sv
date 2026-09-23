@@ -23,16 +23,10 @@ module top (
     logic npu_done;
     logic [2:0] class_result;
 
-    // DIAGNOSTIC (2026-08-20, uncommitted): system_clk driven from the
-    // PLL's CLKOUTD tap (exact /2 of the same locked VCO, see
-    // gowin_rpll.v's comment) instead of the primary 30MHz CLKOUT, to test
-    // whether the conv2 stale-capture hazard (troubleshooting_progress.md,
-    // "1d") is timing-margin-sensitive -- if it goes away or gets rarer at
-    // half speed, that's real evidence for a margin/hazard explanation
-    // rather than a deterministic logic bug. uart_rx/uart_tx's CLK_FREQ
-    // below is updated to match (15_000_000) so the baud rate stays
-    // correct. Revert both (back to .clkout + default CLK_FREQ) once the
-    // test is done.
+    // system_clk is the PLL's full-rate output. clkoutd (an exact /2 of the
+    // same VCO) is kept wired as system_clk_half for timing-margin
+    // experiments -- driving system_clk from it also needs SYS_CLK_HZ halved
+    // so the UART baud divisors stay right. Nothing uses it by default.
     logic system_clk_full, system_clk_half;
 `ifdef NO_RPLL
     // Boards without the GW1N/GW2A rPLL (Tang Primer 25K, GW5A): run straight
@@ -47,7 +41,7 @@ module top (
         .clkin(clk)
     );
 `endif
-    assign system_clk = system_clk_full;  // TEMP: full-speed baseline re-check for the same 30-image sweep
+    assign system_clk = system_clk_full;
 
     // Hotstate runs at system_clk; the datapath is clocked from the same
     // continuous clock.  We deliberately bypass Gowin_DCS clock gating:

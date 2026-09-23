@@ -23,6 +23,11 @@ SHELL := /bin/bash
 -include ../../tools.mk
 -include ../../local.mk
 
+# This design needs a yosys WITH the slang plugin. It has its own variable so
+# you can point it at one (e.g. OSS CAD Suite's) without changing YOSYS for the
+# other examples -- KAN_hotstate's 20K build needs yosys 0.56, which has none.
+YOSYS_SLANG  ?= $(YOSYS)
+
 IP_DIR       := ../../IP
 MODULE       := main_controller
 BUILD        := build_primer25k
@@ -78,12 +83,13 @@ RTL = lib/spatial_3x3_mac_gowin.sv \
 # and the template's .mem paths are relative to it.
 synth: | $(BUILD)
 	$(TOOL_BANNER)
-	@$(YOSYS) -m slang -p 'help read_slang' >/dev/null 2>&1 || { \
-	  echo "ERROR: '$(YOSYS)' has no slang plugin (read_slang), which this design needs."; \
-	  echo "       Point YOSYS at an OSS CAD Suite yosys, e.g."; \
-	  echo "       make -f Makefile.synth_primer25k pack YOSYS=/path/to/oss-cad-suite/bin/yosys"; \
+	@$(YOSYS_SLANG) -m slang -p 'help read_slang' >/dev/null 2>&1 || { \
+	  echo "ERROR: '$(YOSYS_SLANG)' has no slang plugin (read_slang), which this design needs."; \
+	  echo "       Point YOSYS_SLANG at an OSS CAD Suite yosys, e.g."; \
+	  echo "       make -f Makefile.synth_primer25k pack YOSYS_SLANG=/path/to/oss-cad-suite/bin/yosys"; \
 	  exit 1; }
-	$(YOSYS) -m slang -p " \
+	@echo "    yosys_slang $(YOSYS_SLANG)"
+	$(YOSYS_SLANG) -m slang -p " \
 		read_verilog -sv $(VLOG); \
 		read_slang --allow-use-before-declare -D NO_RPLL -D SYS_CLK_HZ=$(CLK_HZ) $(RTL); \
 		synth_gowin -family gw5a -nolutram -top $(TOP) -json $(BUILD)/synth_primer25k.json; \
