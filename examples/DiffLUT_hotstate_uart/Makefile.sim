@@ -1,0 +1,21 @@
+# Makefile.sim — Verilator end-to-end simulation: UART image in, digit out.
+#   make sim n=20        simulate 20 images from gen/images.hex
+#   make sim n=500       full 500-image test set
+IP_DIR    = ../../IP
+BUILD     = build_primer25k
+
+n        ?= 20
+
+VSRCS = tb_dlut_uart.v dlut_hw_top_uart.v dlut_uart_loader_template.v \
+        image_reg.v argmax10.v logic_net.v lut4_sim.v \
+        $(BUILD)/uart_tx_template.v $(BUILD)/uart_rx_template.v \
+        $(IP_DIR)/hotstate.sv $(IP_DIR)/microcode.sv $(IP_DIR)/control.sv \
+        $(IP_DIR)/next_address.sv $(IP_DIR)/timer.sv $(IP_DIR)/variable.sv \
+        $(IP_DIR)/switch.sv $(IP_DIR)/stack.sv
+
+.PHONY: sim
+
+sim:
+	verilator --timing --cc -Wno-fatal -Wno-WIDTHTRUNC --exe --build -j 4 \
+	  $(VSRCS) sim_main.cpp --top tb_dlut_uart
+	./obj_dir/Vtb_dlut_uart +n=$(n)

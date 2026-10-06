@@ -1,0 +1,6 @@
+# Stimulus file for dlut_uart_loader
+# Format: CYCLE var=value var=value ...
+# Example: 0 a0=1 a1=0
+
+# Initialize inputs
+0 rx_done=0 rx_byte=0 tx_busy=0 digit=0

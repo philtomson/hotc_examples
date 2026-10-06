@@ -1,0 +1,31 @@
+[metadata]
+generated_from = "step"
+variable_count = 13
+
+[state_variables]
+"0" = { name = "busy", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"1" = { name = "img_waddr", type = "output", initial_value = 0, width = 10, is_unsigned = false }
+"11" = { name = "img_wdata", type = "output", initial_value = 0, width = 8, is_unsigned = false }
+"19" = { name = "img_wen", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"20" = { name = "tx_start", type = "output", initial_value = 0, width = 1, is_unsigned = false }
+"21" = { name = "tx_data", type = "output", initial_value = 0, width = 8, is_unsigned = false }
+
+[input_variables]
+"0" = { name = "rx_done", type = "input", width = 1, start_bit = 0, referenced = true, compacted_start_bit = 0 }
+"1" = { name = "rx_byte", type = "input", width = 8, start_bit = 1, referenced = false, compacted_start_bit = -1 }
+"2" = { name = "tx_busy", type = "input", width = 1, start_bit = 9, referenced = true, compacted_start_bit = 1 }
+"3" = { name = "digit", type = "input", width = 4, start_bit = 10, referenced = true, compacted_start_bit = 2 }
+"4" = { name = "byte_idx", type = "input", width = 10, start_bit = 14, referenced = false, compacted_start_bit = -1, timer_index = 0 }
+
+[switches]
+
+[external_inputs]
+
+[timers]
+"0" = { name = "byte_idx", type = "timer", width = 10, initial_value = 0, max_value = 1023, increment = 1 }
+"1" = { name = "w", type = "timer", width = 10, initial_value = 0, max_value = 1023, increment = 1 }
+
+[expressions]
+"1" = { expr = "((783) - byte_idx)", result_width = 10, state_lo = 1, state_hi = 10 }
+"2" = { expr = "rx_byte", result_width = 8, state_lo = 11, state_hi = 18 }
+"3" = { expr = "signed(digit, 4)", result_width = 8, state_lo = 21, state_hi = 28 }
