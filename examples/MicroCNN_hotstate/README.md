@@ -17,7 +17,7 @@ model (`golden_benchmark.py`):
 | Tang Nano 20K (GW2AR-18C) | Gowin's `gw_sh` (Gowin EDA IDE) | 52/52 test images match |
 
 The current controller packs independent assignments into comma groups
-(238 → 119 microcode instructions, ~44% fewer cycles per inference). It is
+(238 → 117 microcode instructions, ~48% fewer cycles per inference). It is
 verified on the 20K. The 25K's checked-in bitstream was built from the
 previous controller; the current source has not yet been run on the 25K.
 

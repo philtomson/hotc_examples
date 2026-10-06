@@ -1,7 +1,7 @@
 // Hotstate microcode controller for the MicroCNN accelerator.
 // Replaces the hierarchical FSM control plane (master_pipeline_fsm +
 // conv1_fsm + conv2_fsm + fc1_fsm + fc2_fsm, ~850 lines of Verilog) with
-// a single hotstate machine (119 microcode instructions).
+// a single hotstate machine (117 microcode instructions).
 //
 // The soc_controller (RTL, at system_clk) handles UART image loading and
 // asserts conv1_start when the 'S' command is received.  This hotstate
@@ -67,7 +67,9 @@ bool conv1_start_latched = 0;
 bool img_en = 0;
 bool weight_en = 0;
 bool bias_en = 0;
-bool shift_en = 0;
+// shift_en: one_shot, so `shift_en = 1;` is a single-cycle pulse with no
+// deassert instruction (cases 2 and 5: exactly one shift per pixel).
+one_shot bool shift_en = 0;
 // one_shot so each `compute_en = 1` write (case 7's adjacent COMPUTE_0 /
 // COMPUTE_1 pair) is a genuine 1-cycle pulse and the shared conv core sees
 // exactly 2 compute cycles per conv2 output pixel, as in conv2_fsm.sv. The
@@ -165,14 +167,13 @@ void main() {
             // captured per-pixel stream showed runs of up to 9 identical
             // values (avg run length 2.8) and only 2/169 exact matches
             // against the golden maxpool1 reference. Fix: set img_addr,
-            // THEN pulse shift_en high for exactly one statement/cycle
-            // (immediately followed by an explicit deassert) so exactly
+            // THEN pulse shift_en (one_shot: high for exactly one cycle)
+            // so exactly
             // one shift happens per logical pixel, timed so img_rdata's
             // 1-cycle synchronous-read latency has already settled by the
             // time the pulse reaches the line buffer's own registered
             // shift_en_d.
             shift_en = 1;
-            shift_en = 0;
             if (c1_pixel_cnt == 783) {
                 c1_pixel_cnt = 0, layer_phase = 3;
             } else {
@@ -256,8 +257,7 @@ void main() {
             // cycles while shift_en/shift_en_d stayed high the whole
             // time, and the captured 3x3 MAC window came back as 1-2
             // distinct values repeated across all 9 taps. Fix: pulse
-            // shift_en high for exactly one statement/cycle (immediately
-            // followed by an explicit deassert), placed right after
+            // shift_en (one_shot: high for exactly one cycle), placed right after
             // ram_raddr's write so conv2_input_ram's 1-cycle synchronous-
             // read latency has already settled by the time the pulse
             // reaches the line buffer's own registered shift_en_d.
@@ -265,7 +265,6 @@ void main() {
             weight_en = 1, bias_en = 1, compute_en = 0, accumulate = 0,
             chunk_sel = 0, ram_raddr = c2_pixel_cnt;
             shift_en = 1;
-            shift_en = 0;
             // Once the 3×3 window is valid, move to compute.
             // Checked HERE, BEFORE the coordinate update below, so it reads
             // c2_lb_row/c2_lb_col for pixel k itself (the pixel just shifted

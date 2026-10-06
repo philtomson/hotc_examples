@@ -6,7 +6,7 @@ localparam NUM_VARS = 6;
 localparam NUM_VARS_ADDR_BITS = 6;
 localparam NUM_INPUT_BITS = 6;
 localparam NUM_INPUT_VARS = 2;
-localparam NUM_WORDS = 119;
+localparam NUM_WORDS = 117;
 localparam NUM_ADR_BITS = 7;
 localparam NUM_VARSEL_BITS = 5;
 localparam VD_ROW_WIDTH = 32;
@@ -45,7 +45,7 @@ localparam INSTR_WIDTH = STATE_WIDTH + MASK_WIDTH + JADR_WIDTH + VARSEL_WIDTH +
                          SUB_WIDTH + RTN_WIDTH + EXTERNAL_WIDTH;
 localparam ONE_SHOT_MASK_LO = 0;
 localparam ONE_SHOT_MASK_HI = 0;
-localparam ONE_SHOT_MASK_2 = 207872;
+localparam ONE_SHOT_MASK_2 = 208384;
 localparam ONE_SHOT_MASK_3 = 0;
 localparam ONE_SHOT_MASK_4 = 0;
 
