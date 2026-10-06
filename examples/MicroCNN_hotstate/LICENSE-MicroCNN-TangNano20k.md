@@ -1,19 +1,24 @@
+# Licence for the files from MicroCNN-TangNano20k
+
+These files in this directory come from
+[SweiryDev/MicroCNN-TangNano20k](https://github.com/SweiryDev/MicroCNN-TangNano20k),
+with the local changes described under "Origin" in `README.md`:
+
+- the datapath RTL in `lib/` (except `lib/gw2a/` and `lib/gw5a/`)
+- `hardware_roms/`
+- `micro_cnn_blood.pth`
+- `golden_benchmark.py`
+- `uart_medmnist_loader.py`
+
+They are distributed under the upstream project's MIT licence, reproduced
+verbatim below. Everything else in this directory is under this
+repository's own MIT licence (`/LICENSE.md`).
+
+---
+
 MIT License
 
-Copyright (c) 2026 Hotwright Inc.
-
-This license applies to this repository EXCEPT the following directories,
-each licensed separately under CC BY-NC-ND 4.0 (see their own `LICENSE.md`,
-and the "License" section of this repository's top-level `README.md`, for
-details):
-
-- `IP/` (the hotstate engine SystemVerilog)
-- `examples/Tsetlin_hotstate_uart/`
-
-The third-party files listed in
-`examples/MicroCNN_hotstate/LICENSE-MicroCNN-TangNano20k.md` are
-Copyright (c) 2026 SweiryDev, also under the MIT License; that file holds
-their notice.
+Copyright (c) 2026 SweiryDev
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

@@ -185,11 +185,12 @@ This repository is under two licenses, split by directory:
   version of the engine (or of Tsetlin_hotstate_uart), or using either
   commercially, is not.
 
-- **Exception, licence pending:** in [`examples/MicroCNN_hotstate/`](examples/MicroCNN_hotstate/),
-  the datapath RTL in `lib/` (except `lib/gw5a/`), `hardware_roms/`,
+- **Third-party files:** in [`examples/MicroCNN_hotstate/`](examples/MicroCNN_hotstate/),
+  the datapath RTL in `lib/` (except `lib/gw2a/` and `lib/gw5a/`), `hardware_roms/`,
   `micro_cnn_blood.pth`, `golden_benchmark.py` and `uart_medmnist_loader.py`
-  come from [SweiryDev/MicroCNN-TangNano20k](https://github.com/SweiryDev/MicroCNN-TangNano20k),
-  which does not state a licence. They are NOT covered by the MIT grant above.
+  come from [SweiryDev/MicroCNN-TangNano20k](https://github.com/SweiryDev/MicroCNN-TangNano20k)
+  and are MIT-licensed by their author — see
+  [`LICENSE-MicroCNN-TangNano20k.md`](examples/MicroCNN_hotstate/LICENSE-MicroCNN-TangNano20k.md).
 
 If you're unsure which applies to a given file, check which directory it's
 in — each CC-BY-NC-ND directory's own `LICENSE.md` is the authoritative

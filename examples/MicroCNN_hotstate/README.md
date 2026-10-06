@@ -165,7 +165,9 @@ primitive modules (`lib/gw2a/` or `lib/gw5a/`) and the board top differ.
 The network, its training, the datapath RTL in `lib/`, the weight ROMs,
 `micro_cnn_blood.pth`, `golden_benchmark.py` and `uart_medmnist_loader.py`
 come from
-[SweiryDev/MicroCNN-TangNano20k](https://github.com/SweiryDev/MicroCNN-TangNano20k).
+[SweiryDev/MicroCNN-TangNano20k](https://github.com/SweiryDev/MicroCNN-TangNano20k)
+and are used under its MIT licence
+([`LICENSE-MicroCNN-TangNano20k.md`](LICENSE-MicroCNN-TangNano20k.md)).
 Local changes to those files: the four `*_param_rom.sv` load their ROMs
 from a relative path instead of an absolute one, `maxpool2x2.sv` and
 `tdm_npu_router.sv` carry fixes and debug taps made while bringing up the
