@@ -13,8 +13,13 @@ model (`golden_benchmark.py`):
 
 | Board | Toolchain | Result |
 |---|---|---|
-| Tang Primer 25K (GW5A-25A) | open-source: yosys + slang, nextpnr-himbaechel, apycula | 52/52 test images match |
+| Tang Primer 25K (GW5A-25A) | open-source: yosys + slang, nextpnr-himbaechel, apycula | 52/52 test images match (previous controller build, see below) |
 | Tang Nano 20K (GW2AR-18C) | Gowin's `gw_sh` (Gowin EDA IDE) | 52/52 test images match |
+
+The current controller packs independent assignments into comma groups
+(238 → 154 microcode instructions, ~19% fewer cycles per inference). It is
+verified on the 20K. The 25K's checked-in bitstream was built from the
+previous controller; the current source has not yet been run on the 25K.
 
 The two boards need different toolchains. On the 20K the open-source flow
 builds this design and meets timing, but the bitstream misclassifies — the

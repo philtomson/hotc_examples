@@ -229,7 +229,7 @@ hotstate #(
     .NUM_VARS(6),
     .NUM_VARS_ADDR_BITS(6),
     .NUM_ADR_BITS(8),
-    .NUM_WORDS(238),
+    .NUM_WORDS(154),
     .NUM_VARSEL_BITS(5),
     .NUM_TIMERS(0),
     .NUM_SWITCHES(1),

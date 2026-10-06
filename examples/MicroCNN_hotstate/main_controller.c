@@ -1,7 +1,7 @@
 // Hotstate microcode controller for the MicroCNN accelerator.
 // Replaces the hierarchical FSM control plane (master_pipeline_fsm +
 // conv1_fsm + conv2_fsm + fc1_fsm + fc2_fsm, ~850 lines of Verilog) with
-// a single hotstate machine (~170 microcode instructions).
+// a single hotstate machine (154 microcode instructions).
 //
 // The soc_controller (RTL, at system_clk) handles UART image loading and
 // asserts conv1_start when the 'S' command is received.  This hotstate
@@ -139,32 +139,21 @@ void main() {
 
         // ── Phase 1: Conv1 — load weights + bias for current filter ─
         case 1:
-            layer_state = 0;
-            npu_sleep = 0;   // wake the datapath clock (matches master_fsm default)
-            img_en = 0;
-            weight_en = 1;
-            bias_en = 1;
-            filter_idx = c1_filter_cnt;
-            shift_en = 0;
-            compute_en = 0;
-            accumulate = 0;
-            chunk_sel = 0;
-            mult_ce = 0;
-            mult_clear = 0;
-            param_en = 0;
-            fc1_valid_out = 0;
-            fc2_valid_out = 0;
-            layer_phase = 2;
+            // One instruction. weight_en/bias_en are high for exactly one
+            // cycle: conv1_param_rom reads the whole filter on that edge.
+            layer_state = 0, npu_sleep = 0, img_en = 0,
+            weight_en = 1, bias_en = 1, filter_idx = c1_filter_cnt,
+            shift_en = 0, compute_en = 0, accumulate = 0, chunk_sel = 0,
+            mult_ce = 0, mult_clear = 0, param_en = 0,
+            fc1_valid_out = 0, fc2_valid_out = 0, layer_phase = 2;
             break;
 
         // ── Phase 2: Conv1 — stream 28×28 = 784 pixels ─────────────
         case 2:
-            img_en = 1;
-            weight_en = 0;
-            bias_en = 0;
-            compute_en = 1;
-            accumulate = 0;
-            chunk_sel = 0;
+            // img_addr shares the enables' instruction, so it still lands
+            // exactly one cycle before shift_en (see below).
+            img_en = 1, weight_en = 0, bias_en = 0, compute_en = 1,
+            accumulate = 0, chunk_sel = 0, img_addr = c1_pixel_cnt;
             // BUG (fixed): hotstate executes one C statement per clock
             // cycle, so a single pass through this case's ~9 statements
             // takes ~9 cycles -- but shift_en=1 used to be asserted early
@@ -182,12 +171,10 @@ void main() {
             // 1-cycle synchronous-read latency has already settled by the
             // time the pulse reaches the line buffer's own registered
             // shift_en_d.
-            img_addr = c1_pixel_cnt;
             shift_en = 1;
             shift_en = 0;
             if (c1_pixel_cnt == 783) {
-                c1_pixel_cnt = 0;
-                layer_phase = 3;
+                c1_pixel_cnt = 0, layer_phase = 3;
             } else {
                 c1_pixel_cnt = c1_pixel_cnt + 1;
             }
@@ -195,9 +182,6 @@ void main() {
 
         // ── Phase 3: Conv1 — drain maxpool pipeline (15 cycles) ────
         case 3:
-            img_en = 0;
-            weight_en = 0;
-            bias_en = 0;
             // BUG (fixed): shift_en was held 1 throughout this whole
             // drain phase (15 passes x this case's own multi-statement
             // duration). Since lb1_row/lb1_col are frozen at their last
@@ -219,13 +203,10 @@ void main() {
             // captured by the time streaming ends -- this drain has
             // nothing left to flush, so shift_en simply should not be
             // asserted here at all.
-            shift_en = 0;
-            compute_en = 1;
-            accumulate = 0;
-            chunk_sel = 0;
+            img_en = 0, weight_en = 0, bias_en = 0, shift_en = 0,
+            compute_en = 1, accumulate = 0, chunk_sel = 0;
             if (c1_flush_cnt == 15) {
-                c1_flush_cnt = 0;
-                layer_phase = 4;
+                c1_flush_cnt = 0, layer_phase = 4;
             } else {
                 c1_flush_cnt = c1_flush_cnt + 1;
             }
@@ -233,21 +214,13 @@ void main() {
 
         // ── Phase 4: Conv1 — next filter or move to conv2 ──────────
         case 4:
-            layer_state = 0;
-            img_en = 0;
-            weight_en = 0;
-            bias_en = 0;
-            shift_en = 0;
-            compute_en = 0;
-            accumulate = 0;
-            chunk_sel = 0;
+            layer_state = 0, img_en = 0, weight_en = 0, bias_en = 0,
+            shift_en = 0, compute_en = 0, accumulate = 0, chunk_sel = 0;
             if (c1_filter_cnt == 7) {
                 // All 8 conv1 filters done — advance to conv2
-                c1_filter_cnt = 0;
-                layer_phase = 5;
+                c1_filter_cnt = 0, layer_phase = 5;
             } else {
-                c1_filter_cnt = c1_filter_cnt + 1;
-                layer_phase = 1;
+                c1_filter_cnt = c1_filter_cnt + 1, layer_phase = 1;
             }
             break;
 
@@ -392,33 +365,18 @@ void main() {
 
         // ── Phase 8: Conv2 done — move to FC1 ──────────────────────
         case 8:
-            layer_state = 1;
-            shift_en = 0;
-            compute_en = 0;
-            accumulate = 0;
-            chunk_sel = 0;
-            c2_filter_cnt = 0;
-            c2_pixel_cnt = 0;
-            c2_lb_row = 0;
-            c2_lb_col = 0;
+            layer_state = 1, shift_en = 0, compute_en = 0, accumulate = 0, chunk_sel = 0,
+            c2_filter_cnt = 0, c2_pixel_cnt = 0, c2_lb_row = 0, c2_lb_col = 0,
             layer_phase = 9;
             break;
 
         // ── Phase 9: FC1 — clear NPU accumulators for new neuron ───
         case 9:
-            layer_state = 1;
-            img_en = 0;
-            weight_en = 0;
-            bias_en = 0;
-            shift_en = 0;
-            compute_en = 0;
-            accumulate = 0;
-            chunk_sel = 0;
-            mult_clear = 1;
-            mult_ce = 0;
-            param_en = 0;
-            fc1_valid_out = 0;
-            fc2_valid_out = 0;
+            // One instruction: mult_clear is high for exactly one cycle, until
+            // case 10's first instruction clears it.
+            layer_state = 1, img_en = 0, weight_en = 0, bias_en = 0, shift_en = 0,
+            compute_en = 0, accumulate = 0, chunk_sel = 0, mult_clear = 1,
+            mult_ce = 0, param_en = 0, fc1_valid_out = 0, fc2_valid_out = 0,
             layer_phase = 10;
             break;
 
@@ -460,8 +418,7 @@ void main() {
         // AREG=BREG=CREG=DREG=0). The gaps between pulses are harmless:
         // case 10 has stopped advancing the addresses.
         case 11:
-            mult_clear = 0;
-            param_en = 0;
+            mult_clear = 0, param_en = 0;
             if (fc1_drain_cnt == 0) {
                 mult_ce = 1;
             }
@@ -472,8 +429,7 @@ void main() {
                 mult_ce = 1;
             }
             if (fc1_drain_cnt == 15) {
-                fc1_drain_cnt = 0;
-                layer_phase = 12;
+                fc1_drain_cnt = 0, layer_phase = 12;
             } else {
                 fc1_drain_cnt = fc1_drain_cnt + 1;
             }
@@ -481,32 +437,23 @@ void main() {
 
         // ── Phase 12: FC1 — latch neuron result into fc2_buffer_ram ─
         case 12:
-            mult_clear = 0;
-            mult_ce = 0;
-            param_en = 0;
-            fc1_valid_out = 1;
+            mult_clear = 0, mult_ce = 0, param_en = 0, fc1_valid_out = 1;
             if (fc1_neuron_cnt == 31) {
-                fc1_neuron_cnt = 0;
-                layer_phase = 13;
+                fc1_neuron_cnt = 0, layer_phase = 13;
             } else {
-                fc1_neuron_cnt = fc1_neuron_cnt + 1;
-                layer_phase = 9;
+                fc1_neuron_cnt = fc1_neuron_cnt + 1, layer_phase = 9;
             }
             break;
 
         // ── Phase 13: FC1 done — move to FC2 ───────────────────────
         case 13:
-            fc1_valid_out = 0;
-            fc1_neuron_cnt = 0;
-            layer_phase = 14;
+            fc1_valid_out = 0, fc1_neuron_cnt = 0, layer_phase = 14;
             break;
 
         // ── Phase 14: FC2 — clear NPU accumulators for new neuron ──
         case 14:
-            mult_clear = 1;
-            mult_ce = 0;
-            param_en = 0;
-            fc2_valid_out = 0;
+            // One instruction: mult_clear is high for exactly one cycle (see case 9).
+            mult_clear = 1, mult_ce = 0, param_en = 0, fc2_valid_out = 0,
             layer_phase = 15;
             break;
 
@@ -531,8 +478,7 @@ void main() {
         // ── Phase 16: FC2 — drain pipeline (16 cycles) ─────────────
         // Exactly 3 one_shot mult_ce pulses, as in case 11.
         case 16:
-            mult_clear = 0;
-            param_en = 0;
+            mult_clear = 0, param_en = 0;
             if (fc2_flush_cnt == 0) {
                 mult_ce = 1;
             }
@@ -543,8 +489,7 @@ void main() {
                 mult_ce = 1;
             }
             if (fc2_flush_cnt == 15) {
-                fc2_flush_cnt = 0;
-                layer_phase = 17;
+                fc2_flush_cnt = 0, layer_phase = 17;
             } else {
                 fc2_flush_cnt = fc2_flush_cnt + 1;
             }
@@ -552,16 +497,11 @@ void main() {
 
         // ── Phase 17: FC2 — latch neuron result, advance or done ───
         case 17:
-            mult_clear = 0;
-            mult_ce = 0;
-            param_en = 0;
-            fc2_valid_out = 1;
+            mult_clear = 0, mult_ce = 0, param_en = 0, fc2_valid_out = 1;
             if (fc2_neuron_cnt == 7) {
-                fc2_neuron_cnt = 0;
-                layer_phase = 18;
+                fc2_neuron_cnt = 0, layer_phase = 18;
             } else {
-                fc2_neuron_cnt = fc2_neuron_cnt + 1;
-                layer_phase = 14;
+                fc2_neuron_cnt = fc2_neuron_cnt + 1, layer_phase = 14;
             }
             break;
 
