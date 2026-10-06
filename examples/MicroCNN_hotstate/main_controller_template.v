@@ -50,15 +50,15 @@ module main_controller (
     output wire layer_state,
     output wire npu_sleep,
     output wire npu_done,
-    output wire [7:0] debug_adr,
+    output wire [6:0] debug_adr,
     output wire [138:0] states_out,
     output wire ready,
     output wire lhs_out,
     output wire jmp_flag_out,
-    output wire [7:0] jmp_bus_out,
+    output wire [6:0] jmp_bus_out,
     output wire br_out,
     output wire fj_out,
-    output wire [7:0] next_pc,
+    output wire [6:0] next_pc,
     output wire state_capture
 );
 
@@ -192,10 +192,10 @@ wire [7:0] expr_8_raw = states_bus[30:23];
 wire [138:0] expr_8_vec = {{35{1'b0}}, expr_8_raw, {96{1'b0}}};
 wire [4:0] expr_9_raw = (states_bus[39:35]) + (5'd1);
 wire [138:0] expr_9_vec = {{99{1'b0}}, expr_9_raw, {35{1'b0}}};
-wire [4:0] expr_10_raw = (states_bus[44:40]) + (5'd1);
-wire [138:0] expr_10_vec = {{94{1'b0}}, expr_10_raw, {40{1'b0}}};
-wire [7:0] expr_11_raw = (states_bus[30:23]) + (8'd1);
-wire [138:0] expr_11_vec = {{108{1'b0}}, expr_11_raw, {23{1'b0}}};
+wire [7:0] expr_10_raw = (states_bus[30:23]) + (8'd1);
+wire [138:0] expr_10_vec = {{108{1'b0}}, expr_10_raw, {23{1'b0}}};
+wire [4:0] expr_11_raw = (states_bus[44:40]) + (5'd1);
+wire [138:0] expr_11_vec = {{94{1'b0}}, expr_11_raw, {40{1'b0}}};
 wire [3:0] expr_12_raw = (states_bus[34:31]) + (4'd1);
 wire [138:0] expr_12_vec = {{104{1'b0}}, expr_12_raw, {31{1'b0}}};
 wire [5:0] expr_13_raw = states_bus[50:45];
@@ -222,18 +222,24 @@ wire [3:0] expr_23_raw = (states_bus[68:65]) + (4'd1);
 wire [138:0] expr_23_vec = {{70{1'b0}}, expr_23_raw, {65{1'b0}}};
 wire [2:0] expr_24_raw = (states_bus[64:62]) + (3'd1);
 wire [138:0] expr_24_vec = {{74{1'b0}}, expr_24_raw, {62{1'b0}}};
-wire [21:0] expr_25_raw = (((states_bus[50:45]) & 63) << 0) | (((((states_bus[55:51]) * (11'd50)) + (states_bus[50:45])) & 2047) << 6) | (((states_bus[55:51]) & 31) << 17);
-wire [138:0] expr_25_vec = {{13{1'b0}}, expr_25_raw, {104{1'b0}}};
-wire [9:0] expr_26_raw = (((states_bus[61:60]) & 3) << 0) | (((((states_bus[64:62]) << (2)) + (states_bus[61:60])) & 31) << 2) | (((states_bus[64:62]) & 7) << 7);
-wire [138:0] expr_26_vec = {{3{1'b0}}, expr_26_raw, {126{1'b0}}};
-wire [3613:0] expr_results_flat = {expr_26_vec, expr_25_vec, expr_24_vec, expr_23_vec, expr_22_vec, expr_21_vec, expr_20_vec, expr_19_vec, expr_18_vec, expr_17_vec, expr_16_vec, expr_15_vec, expr_14_vec, expr_13_vec, expr_12_vec, expr_11_vec, expr_10_vec, expr_9_vec, expr_8_vec, expr_7_vec, expr_6_vec, expr_5_vec, expr_4_vec, expr_3_vec, expr_2_vec, expr_1_vec};
+wire [11:0] expr_25_raw = (((states_bus[34:31]) & 15) << 0) | (((states_bus[30:23]) & 255) << 4);
+wire [138:0] expr_25_vec = {{35{1'b0}}, expr_25_raw, {92{1'b0}}};
+wire [16:0] expr_26_raw = ((((states_bus[39:35]) + (5'd1)) & 31) << 12) | ((((states_bus[30:23]) + (8'd1)) & 255) << 0);
+wire [138:0] expr_26_vec = {{99{1'b0}}, expr_26_raw, {23{1'b0}}};
+wire [21:0] expr_27_raw = ((((states_bus[44:40]) + (5'd1)) & 31) << 17) | ((((states_bus[30:23]) + (8'd1)) & 255) << 0);
+wire [138:0] expr_27_vec = {{94{1'b0}}, expr_27_raw, {23{1'b0}}};
+wire [21:0] expr_28_raw = (((states_bus[50:45]) & 63) << 0) | (((((states_bus[55:51]) * (11'd50)) + (states_bus[50:45])) & 2047) << 6) | (((states_bus[55:51]) & 31) << 17);
+wire [138:0] expr_28_vec = {{13{1'b0}}, expr_28_raw, {104{1'b0}}};
+wire [9:0] expr_29_raw = (((states_bus[61:60]) & 3) << 0) | (((((states_bus[64:62]) << (2)) + (states_bus[61:60])) & 31) << 2) | (((states_bus[64:62]) & 7) << 7);
+wire [138:0] expr_29_vec = {{3{1'b0}}, expr_29_raw, {126{1'b0}}};
+wire [4030:0] expr_results_flat = {expr_29_vec, expr_28_vec, expr_27_vec, expr_26_vec, expr_25_vec, expr_24_vec, expr_23_vec, expr_22_vec, expr_21_vec, expr_20_vec, expr_19_vec, expr_18_vec, expr_17_vec, expr_16_vec, expr_15_vec, expr_14_vec, expr_13_vec, expr_12_vec, expr_11_vec, expr_10_vec, expr_9_vec, expr_8_vec, expr_7_vec, expr_6_vec, expr_5_vec, expr_4_vec, expr_3_vec, expr_2_vec, expr_1_vec};
 
 hotstate #(
     .NUM_STATES(139),
     .NUM_VARS(6),
     .NUM_VARS_ADDR_BITS(6),
-    .NUM_ADR_BITS(8),
-    .NUM_WORDS(144),
+    .NUM_ADR_BITS(7),
+    .NUM_WORDS(119),
     .NUM_VARSEL_BITS(5),
     .NUM_TIMERS(0),
     .NUM_SWITCHES(1),
@@ -253,7 +259,7 @@ hotstate #(
     .NUM_COMPARATORS(21),
     .CMP_VARSEL_BASE(3),
     .EXPR_SEL_BITS(5),
-    .NUM_EXPRS(26),
+    .NUM_EXPRS(29),
     .DATA_STACK_WIDTH(0),
     .RESET_VALUES(139'h20000000000000000000000000000000000),
     .ONE_SHOT_MASK(139'h0000000000000032c000000000000000000)
@@ -263,7 +269,7 @@ hotstate #(
     .hlt(1'b0),
     .comparators({__cmp_20, __cmp_19, __cmp_18, __cmp_17, __cmp_16, __cmp_15, __cmp_14, __cmp_13, __cmp_12, __cmp_11, __cmp_10, __cmp_9, __cmp_8, __cmp_7, __cmp_6, __cmp_5, __cmp_4, __cmp_3, __cmp_2, __cmp_1, __cmp_0}),
     .interrupt(1'b0),
-    .interrupt_address(8'b0),
+    .interrupt_address(7'b0),
     .variables(variables_bus),
     .states(states_bus),
     .debug_adr(debug_adr),
@@ -272,9 +278,9 @@ hotstate #(
     .vd_tdata({32{1'b0}}),
     .vd_load_init(1'b0),
     .sm_tvalid(1'b0),
-    .sm_tdata({304{1'b0}}),
+    .sm_tdata({303{1'b0}}),
     .load_init(1'b0),
-    .switch_tdata(8'b0),
+    .switch_tdata(7'b0),
     .switch_tvalid(1'b0),
     .switch_trigger(1'b1),
     .tim_tvalid(1'b0),

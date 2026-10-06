@@ -72,8 +72,8 @@ num_comparators = 21
 "7" = { expr = "c2_filter_cnt", result_width = 4, state_lo = 92, state_hi = 95 }
 "8" = { expr = "c2_pixel_cnt", result_width = 8, state_lo = 96, state_hi = 103 }
 "9" = { expr = "(((c2_lb_row) + (1)) & 31)", result_width = 5, state_lo = 35, state_hi = 39 }
-"10" = { expr = "(((c2_lb_col) + (1)) & 31)", result_width = 5, state_lo = 40, state_hi = 44 }
-"11" = { expr = "(((c2_pixel_cnt) + (1)) & 255)", result_width = 8, state_lo = 23, state_hi = 30 }
+"10" = { expr = "(((c2_pixel_cnt) + (1)) & 255)", result_width = 8, state_lo = 23, state_hi = 30 }
+"11" = { expr = "(((c2_lb_col) + (1)) & 31)", result_width = 5, state_lo = 40, state_hi = 44 }
 "12" = { expr = "(((c2_filter_cnt) + (1)) & 15)", result_width = 4, state_lo = 31, state_hi = 34 }
 "13" = { expr = "fc1_chunk_cnt", result_width = 6, state_lo = 104, state_hi = 109 }
 "14" = { expr = "((((((fc1_neuron_cnt) * (50)) & 2047)) + (fc1_chunk_cnt)) & 2047)", result_width = 11, state_lo = 110, state_hi = 120 }
@@ -87,8 +87,11 @@ num_comparators = 21
 "22" = { expr = "(((fc2_chunk_cnt) + (1)) & 3)", result_width = 2, state_lo = 60, state_hi = 61 }
 "23" = { expr = "(((fc2_flush_cnt) + (1)) & 15)", result_width = 4, state_lo = 65, state_hi = 68 }
 "24" = { expr = "(((fc2_neuron_cnt) + (1)) & 7)", result_width = 3, state_lo = 62, state_hi = 64 }
-"25" = { expr = "(((fc1_chunk_cnt) & 63) << 0) | (((((((((fc1_neuron_cnt) * (50)) & 2047)) + (fc1_chunk_cnt)) & 2047)) & 2047) << 6) | (((fc1_neuron_cnt) & 31) << 17)", result_width = 22, state_lo = 104, state_hi = 125 }
-"26" = { expr = "(((fc2_chunk_cnt) & 3) << 0) | (((((((((fc2_neuron_cnt) << (2)) & 31)) + (fc2_chunk_cnt)) & 31)) & 31) << 2) | (((fc2_neuron_cnt) & 7) << 7)", result_width = 10, state_lo = 126, state_hi = 135 }
+"25" = { expr = "(((c2_filter_cnt) & 15) << 0) | (((c2_pixel_cnt) & 255) << 4)", result_width = 12, state_lo = 92, state_hi = 103 }
+"26" = { expr = "((((((c2_lb_row) + (1)) & 31)) & 31) << 12) | ((((((c2_pixel_cnt) + (1)) & 255)) & 255) << 0)", result_width = 17, state_lo = 23, state_hi = 39 }
+"27" = { expr = "((((((c2_lb_col) + (1)) & 31)) & 31) << 17) | ((((((c2_pixel_cnt) + (1)) & 255)) & 255) << 0)", result_width = 22, state_lo = 23, state_hi = 44 }
+"28" = { expr = "(((fc1_chunk_cnt) & 63) << 0) | (((((((((fc1_neuron_cnt) * (50)) & 2047)) + (fc1_chunk_cnt)) & 2047)) & 2047) << 6) | (((fc1_neuron_cnt) & 31) << 17)", result_width = 22, state_lo = 104, state_hi = 125 }
+"29" = { expr = "(((fc2_chunk_cnt) & 3) << 0) | (((((((((fc2_neuron_cnt) << (2)) & 31)) + (fc2_chunk_cnt)) & 31)) & 31) << 2) | (((fc2_neuron_cnt) & 7) << 7)", result_width = 10, state_lo = 126, state_hi = 135 }
 
 [comparators]
 "0" = { op = "==", lhs = "c1_pixel_cnt", lhs_width = 10, lhs_is_state = true, rhs_value = 783, unsigned_cmp = true, bypass_varsel_id = 3 }

@@ -1,7 +1,7 @@
 // Hotstate microcode controller for the MicroCNN accelerator.
 // Replaces the hierarchical FSM control plane (master_pipeline_fsm +
 // conv1_fsm + conv2_fsm + fc1_fsm + fc2_fsm, ~850 lines of Verilog) with
-// a single hotstate machine (144 microcode instructions).
+// a single hotstate machine (119 microcode instructions).
 //
 // The soc_controller (RTL, at system_clk) handles UART image loading and
 // asserts conv1_start when the 'S' command is received.  This hotstate
@@ -226,8 +226,6 @@ void main() {
 
         // ── Phase 5: Conv2 — shift pixels into line buffer ─────────
         case 5:
-            layer_state = 1;
-            img_en = 0;
             // weight_en/bias_en asserted here (and filter_idx re-asserted
             // every cycle, not just once) so the very first weight_en
             // pulse of a new filter still reads the right filter index.
@@ -237,12 +235,6 @@ void main() {
             // assignment is cosmetic/signal-discipline only, not a fix by
             // itself. The real conv2-output bug turned out to be the
             // shift_en pulse-width issue documented below.
-            filter_idx = c2_filter_cnt;
-            weight_en = 1;
-            bias_en = 1;
-            compute_en = 0;
-            accumulate = 0;
-            chunk_sel = 0;
             // ram_raddr hygiene: this is conv2_input_ram's read address,
             // feeding conv2_line_buffer_wrapper's data_in. It's only
             // otherwise written in phases 6/7 (compute), so without this
@@ -269,7 +261,9 @@ void main() {
             // ram_raddr's write so conv2_input_ram's 1-cycle synchronous-
             // read latency has already settled by the time the pulse
             // reaches the line buffer's own registered shift_en_d.
-            ram_raddr = c2_pixel_cnt;
+            layer_state = 1, img_en = 0, filter_idx = c2_filter_cnt,
+            weight_en = 1, bias_en = 1, compute_en = 0, accumulate = 0,
+            chunk_sel = 0, ram_raddr = c2_pixel_cnt;
             shift_en = 1;
             shift_en = 0;
             // Once the 3×3 window is valid, move to compute.
@@ -285,12 +279,11 @@ void main() {
             }
             // Update 2-D line-buffer coordinates
             if (c2_lb_col == 12) {
-                c2_lb_col = 0;
-                c2_lb_row = c2_lb_row + 1;
+                c2_lb_col = 0, c2_lb_row = c2_lb_row + 1,
+                    c2_pixel_cnt = c2_pixel_cnt + 1;
             } else {
-                c2_lb_col = c2_lb_col + 1;
+                c2_lb_col = c2_lb_col + 1, c2_pixel_cnt = c2_pixel_cnt + 1;
             }
-            c2_pixel_cnt = c2_pixel_cnt + 1;
             break;
 
         // ── Phase 6: Conv2 — settle operands (NO compute pulse) ────
@@ -303,14 +296,8 @@ void main() {
         // and defers BOTH compute cycles to case 7's adjacent comma-group
         // pair.
         case 6:
-            weight_en = 0;
-            bias_en = 0;
-            shift_en = 0;
-            accumulate = 0;
-            chunk_sel = 0;
-            filter_idx = c2_filter_cnt;
-            ram_raddr = c2_pixel_cnt;
-            layer_phase = 7;
+            weight_en = 0, bias_en = 0, shift_en = 0, accumulate = 0, chunk_sel = 0,
+            filter_idx = c2_filter_cnt, ram_raddr = c2_pixel_cnt, layer_phase = 7;
             break;
 
         // ── Phase 7: Conv2 — COMPUTE_0 + COMPUTE_1 on adjacent cycles ─
@@ -335,11 +322,8 @@ void main() {
         // chunk_sel and accumulate MUST rise in the same comma group, and
         // the two compute cycles MUST be adjacent.
         case 7:
-            weight_en = 0;
-            bias_en = 0;
-            shift_en = 0;
-            filter_idx = c2_filter_cnt;
-            ram_raddr = c2_pixel_cnt;
+            weight_en = 0, bias_en = 0, shift_en = 0,
+            filter_idx = c2_filter_cnt, ram_raddr = c2_pixel_cnt;
             compute_en = 1, chunk_sel = 0, accumulate = 0;
             compute_en = 1, chunk_sel = 1, accumulate = 1;
             // After computing the last valid output pixel (window at row12,
@@ -352,11 +336,8 @@ void main() {
                 if (c2_filter_cnt == 15) {
                     layer_phase = 8;
                 } else {
-                    c2_filter_cnt = c2_filter_cnt + 1;
-                    c2_pixel_cnt = 0;
-                    c2_lb_row = 0;
-                    c2_lb_col = 0;
-                    layer_phase = 5;
+                    c2_filter_cnt = c2_filter_cnt + 1, c2_pixel_cnt = 0,
+                        c2_lb_row = 0, c2_lb_col = 0, layer_phase = 5;
                 }
             } else {
                 layer_phase = 5;
