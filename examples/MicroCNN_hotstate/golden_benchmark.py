@@ -175,10 +175,8 @@ def run_benchmark(index, split):
     print(f"   [TIMING] CPU Latency     : {(end_time - start_time) * 1000:.2f} ms")
     print("========================================\n")
 
-    # FC1's post-ReLU-post-scale activation vector (fc2_wdata on hardware
-    # -- see uart_ila_dump.py's "FC1->FC2 handoff" section), for
-    # comparing against the on-chip ILA trace during the classifier bug
-    # investigation (hotc_microcnn_hotstate_classifier_bug_hunt.md).
+    # FC1's post-ReLU-post-scale activation vector (fc2_wdata on hardware),
+    # for comparing against an on-chip trace of the FC1->FC2 handoff.
     print("[*] fc1_shifted (FC1's activation written into fc2_buffer_ram):")
     for n, v in enumerate(fc1_shifted):
         print(f"    fc1_neuron={n:>2}  fc1_shifted={int(v):>3}")

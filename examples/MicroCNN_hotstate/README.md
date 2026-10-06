@@ -168,11 +168,18 @@ come from
 [SweiryDev/MicroCNN-TangNano20k](https://github.com/SweiryDev/MicroCNN-TangNano20k)
 and are used under its MIT licence
 ([`LICENSE-MicroCNN-TangNano20k.md`](LICENSE-MicroCNN-TangNano20k.md)).
-Local changes to those files: the four `*_param_rom.sv` load their ROMs
-from a relative path instead of an absolute one, `maxpool2x2.sv` and
-`tdm_npu_router.sv` carry fixes and debug taps made while bringing up the
-hotstate controller, and `ws_conv_core_gowin.sv` exposes two debug taps.
-`lib/gw2a/` and `tang20k.cst` are written for this repo: they instantiate
+Local changes to those files:
+
+- `tdm_npu_router.sv`: the conv2 output gate is retimed for the hotstate
+  controller (a new `conv2_accumulate_gate` input), plus debug taps.
+- `soc_controller.sv`: a `loading` output, used by the debug-dump trigger.
+- `maxpool2x2.sv`, `ws_conv_core_gowin.sv`: debug taps only.
+- `hardware_roms/conv2_biases.hex`, `fc1_biases.hex`, `fc2_biases.hex`:
+  regenerated with each layer's own bias scale. The upstream files were
+  quantized with the next layer's scale; this fix has been
+  [submitted upstream](https://github.com/SweiryDev/MicroCNN-TangNano20k/pull/3).
+
+`lib/reset_sync.sv` is new. `lib/gw2a/` and `tang20k.cst` are written for this repo: they instantiate
 and configure the same Gowin primitives, with the same parameters and pins,
 as the Gowin IP Core Generator output in the upstream design (the
 synthesized primitives and their parameters are identical).

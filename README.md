@@ -186,7 +186,7 @@ This repository is under two licenses, split by directory:
   commercially, is not.
 
 - **Third-party files:** in [`examples/MicroCNN_hotstate/`](examples/MicroCNN_hotstate/),
-  the datapath RTL in `lib/` (except `lib/gw2a/` and `lib/gw5a/`), `hardware_roms/`,
+  the datapath RTL in `lib/` (except `lib/reset_sync.sv`, `lib/gw2a/` and `lib/gw5a/`), `hardware_roms/`,
   `micro_cnn_blood.pth`, `golden_benchmark.py` and `uart_medmnist_loader.py`
   come from [SweiryDev/MicroCNN-TangNano20k](https://github.com/SweiryDev/MicroCNN-TangNano20k)
   and are MIT-licensed by their author — see

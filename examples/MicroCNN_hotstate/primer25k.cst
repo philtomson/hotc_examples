@@ -1,6 +1,6 @@
 // Tang Primer 25K (GW5A-25A) pins for top_primer25k.sv. Same physical pins as
 // examples/Tsetlin_hotstate_uart/tm_primer25k_uart.cst, hardware-verified
-// 2026-09-09 (see boards/tang_primer_25k.json):
+// 2026-09-09:
 //   E2  50 MHz oscillator      B3  FPGA_UART_RX      C3  FPGA_UART_TX
 //   H11 user button S1 (rst_n)
 // led[2:0] go to spare expansion-header pins; the dock has no user LEDs.

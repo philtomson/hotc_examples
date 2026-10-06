@@ -16,18 +16,11 @@ module maxpool2x2 #(
     output logic valid_out, // High when a 2x2 max is computed
     output logic [7:0] max_out, // The pooled pixel
 
-    // Debug taps (2026-08-21, uncommitted): internal state, never before
-    // observed on real hardware -- every prior diagnosis of pool2's
-    // corruption (this session) inferred maxpool2x2's behavior from its
-    // inputs/outputs/reset-boundary timing alone, all of which are now
-    // independently proven correct while the output remains wrong. Also
-    // exposes the reset/valid_in same-cycle overlap directly (a pixel
-    // arriving on the exact cycle `rst` is asserted would be silently
-    // eaten by the `if (rst) ... else if (valid_in)` priority below,
-    // desyncing col_count/row_parity for the whole next filter -- flagged
-    // by external review, relayed by the user ("DeepSeek"), as untested
-    // by any measurement so far). Unconditional (not `ifdef`-guarded),
-    // matches the project's existing dbg_* tap convention.
+    // Debug taps: internal window state, for tracing pooling on hardware.
+    // dbg_reset_valid_overlap flags a pixel arriving on the same cycle as
+    // `rst`; the `if (rst) ... else if (valid_in)` priority below would
+    // drop it and desync col_count/row_parity for the whole next filter.
+    // Unconditional (not `ifdef`-guarded), like the other dbg_* taps.
     output logic [7:0] dbg_col_count,
     output logic        dbg_row_parity,
     output logic [7:0]  dbg_top_left,

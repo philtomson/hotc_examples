@@ -1,3 +1,4 @@
-// ILA disabled (default). Generated/selected by Makefile's ILA=0/1
-// switch -- see ila_config_on.vh for the enabled variant. This file is
-// intentionally empty: `ILA_ENABLE` stays undefined.
+// On-chip logic analyzer: disabled. `ILA_ENABLE` stays undefined, which
+// compiles out the debug-capture code in top_hotstate.sv and
+// npu_top_hotstate.sv (its ila_capture/ila_dump modules are not included
+// in this repository).

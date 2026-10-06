@@ -6,16 +6,13 @@
 // combinationally (hold_npu_in_reset | (rst_stretch > 0) | rst). That
 // signal fans out widely and is used as an ASYNCHRONOUS reset
 // (`posedge rst`) by every flop in npu_top_hotstate and ila_capture.
-// nextpnr-himbaechel's STA (see build/pnr.log -- grep for "recovery" or
-// "removal" finds nothing) only checks ordinary posedge->posedge setup
+// nextpnr-himbaechel's STA only checks ordinary posedge->posedge setup
 // timing on the npu_clk domain; it never checks reset recovery/removal
-// time at all. That means a marginal recovery-time violation on this
-// specific, wide-fanout, once-per-inference deassertion edge would be
-// completely invisible to every STA report this project has ever
-// produced, yet would manifest as build-to-build (P&R-routing-dependent)
-// flakiness on real hardware with zero functional RTL change -- exactly
-// the symptom pattern seen chasing the class_result glitch (see
-// hotc_microcnn_hotstate_classifier_bug_hunt.md).
+// time. A marginal recovery-time violation on this wide-fanout,
+// once-per-inference deassertion edge would therefore be invisible to
+// every STA report, yet show up as build-to-build (P&R-routing-dependent)
+// flakiness on real hardware with no functional RTL change -- the symptom
+// pattern seen while bringing up the classifier output.
 //
 // This module converts that hazard into an ordinary FF-to-FF path (which
 // IS properly checked by setup/hold STA) by construction: assertion is

@@ -4,7 +4,7 @@ These files in this directory come from
 [SweiryDev/MicroCNN-TangNano20k](https://github.com/SweiryDev/MicroCNN-TangNano20k),
 with the local changes described under "Origin" in `README.md`:
 
-- the datapath RTL in `lib/` (except `lib/gw2a/` and `lib/gw5a/`)
+- the datapath RTL in `lib/` (except `lib/reset_sync.sv`, `lib/gw2a/` and `lib/gw5a/`)
 - `hardware_roms/`
 - `micro_cnn_blood.pth`
 - `golden_benchmark.py`
