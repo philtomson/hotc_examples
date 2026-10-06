@@ -222,14 +222,18 @@ wire [3:0] expr_23_raw = (states_bus[68:65]) + (4'd1);
 wire [138:0] expr_23_vec = {{70{1'b0}}, expr_23_raw, {65{1'b0}}};
 wire [2:0] expr_24_raw = (states_bus[64:62]) + (3'd1);
 wire [138:0] expr_24_vec = {{74{1'b0}}, expr_24_raw, {62{1'b0}}};
-wire [3335:0] expr_results_flat = {expr_24_vec, expr_23_vec, expr_22_vec, expr_21_vec, expr_20_vec, expr_19_vec, expr_18_vec, expr_17_vec, expr_16_vec, expr_15_vec, expr_14_vec, expr_13_vec, expr_12_vec, expr_11_vec, expr_10_vec, expr_9_vec, expr_8_vec, expr_7_vec, expr_6_vec, expr_5_vec, expr_4_vec, expr_3_vec, expr_2_vec, expr_1_vec};
+wire [21:0] expr_25_raw = (((states_bus[50:45]) & 63) << 0) | (((((states_bus[55:51]) * (11'd50)) + (states_bus[50:45])) & 2047) << 6) | (((states_bus[55:51]) & 31) << 17);
+wire [138:0] expr_25_vec = {{13{1'b0}}, expr_25_raw, {104{1'b0}}};
+wire [9:0] expr_26_raw = (((states_bus[61:60]) & 3) << 0) | (((((states_bus[64:62]) << (2)) + (states_bus[61:60])) & 31) << 2) | (((states_bus[64:62]) & 7) << 7);
+wire [138:0] expr_26_vec = {{3{1'b0}}, expr_26_raw, {126{1'b0}}};
+wire [3613:0] expr_results_flat = {expr_26_vec, expr_25_vec, expr_24_vec, expr_23_vec, expr_22_vec, expr_21_vec, expr_20_vec, expr_19_vec, expr_18_vec, expr_17_vec, expr_16_vec, expr_15_vec, expr_14_vec, expr_13_vec, expr_12_vec, expr_11_vec, expr_10_vec, expr_9_vec, expr_8_vec, expr_7_vec, expr_6_vec, expr_5_vec, expr_4_vec, expr_3_vec, expr_2_vec, expr_1_vec};
 
 hotstate #(
     .NUM_STATES(139),
     .NUM_VARS(6),
     .NUM_VARS_ADDR_BITS(6),
     .NUM_ADR_BITS(8),
-    .NUM_WORDS(154),
+    .NUM_WORDS(144),
     .NUM_VARSEL_BITS(5),
     .NUM_TIMERS(0),
     .NUM_SWITCHES(1),
@@ -249,7 +253,7 @@ hotstate #(
     .NUM_COMPARATORS(21),
     .CMP_VARSEL_BASE(3),
     .EXPR_SEL_BITS(5),
-    .NUM_EXPRS(24),
+    .NUM_EXPRS(26),
     .DATA_STACK_WIDTH(0),
     .RESET_VALUES(139'h20000000000000000000000000000000000),
     .ONE_SHOT_MASK(139'h0000000000000032c000000000000000000)

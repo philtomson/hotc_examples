@@ -87,6 +87,8 @@ num_comparators = 21
 "22" = { expr = "(((fc2_chunk_cnt) + (1)) & 3)", result_width = 2, state_lo = 60, state_hi = 61 }
 "23" = { expr = "(((fc2_flush_cnt) + (1)) & 15)", result_width = 4, state_lo = 65, state_hi = 68 }
 "24" = { expr = "(((fc2_neuron_cnt) + (1)) & 7)", result_width = 3, state_lo = 62, state_hi = 64 }
+"25" = { expr = "(((fc1_chunk_cnt) & 63) << 0) | (((((((((fc1_neuron_cnt) * (50)) & 2047)) + (fc1_chunk_cnt)) & 2047)) & 2047) << 6) | (((fc1_neuron_cnt) & 31) << 17)", result_width = 22, state_lo = 104, state_hi = 125 }
+"26" = { expr = "(((fc2_chunk_cnt) & 3) << 0) | (((((((((fc2_neuron_cnt) << (2)) & 31)) + (fc2_chunk_cnt)) & 31)) & 31) << 2) | (((fc2_neuron_cnt) & 7) << 7)", result_width = 10, state_lo = 126, state_hi = 135 }
 
 [comparators]
 "0" = { op = "==", lhs = "c1_pixel_cnt", lhs_width = 10, lhs_is_state = true, rhs_value = 783, unsigned_cmp = true, bypass_varsel_id = 3 }

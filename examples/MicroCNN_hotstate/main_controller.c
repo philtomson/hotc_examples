@@ -1,7 +1,7 @@
 // Hotstate microcode controller for the MicroCNN accelerator.
 // Replaces the hierarchical FSM control plane (master_pipeline_fsm +
 // conv1_fsm + conv2_fsm + fc1_fsm + fc2_fsm, ~850 lines of Verilog) with
-// a single hotstate machine (154 microcode instructions).
+// a single hotstate machine (144 microcode instructions).
 //
 // The soc_controller (RTL, at system_clk) handles UART image loading and
 // asserts conv1_start when the 'S' command is received.  This hotstate
@@ -387,19 +387,18 @@ void main() {
         // would accumulate on every one of them. param_en deliberately
         // stays a level: it only keeps a registered ROM read enabled.
         case 10:
-            mult_clear = 0;
-            param_en = 1;
-            fc1_ram_raddr = fc1_chunk_cnt;
+            // One instruction for all three addresses; mult_ce follows in the
+            // next, so every synchronous read has exactly one edge to complete.
+            mult_clear = 0, param_en = 1, fc1_ram_raddr = fc1_chunk_cnt,
             // weight_addr = neuron_cnt * 50 + chunk_cnt  (combinatorial)
             // A real multiply, unlike FC2's `<< 2`: FC1 has 50 chunks per
             // neuron (fc1_param_rom.sv: 32 neurons * 50 chunks), not a
             // power of 2.
-            fc1_weight_raddr = (fc1_neuron_cnt * 50) + fc1_chunk_cnt;
+            fc1_weight_raddr = (fc1_neuron_cnt * 50) + fc1_chunk_cnt,
             fc1_bias_raddr = fc1_neuron_cnt;
             mult_ce = 1;
             if (fc1_chunk_cnt == 49) {
-                fc1_chunk_cnt = 0;
-                layer_phase = 11;
+                fc1_chunk_cnt = 0, layer_phase = 11;
             } else {
                 fc1_chunk_cnt = fc1_chunk_cnt + 1;
             }
@@ -460,16 +459,14 @@ void main() {
         // ── Phase 15: FC2 — feed 4 chunks per neuron ───────────────
         // mult_ce pulses once per chunk, as in case 10.
         case 15:
-            mult_clear = 0;
-            param_en = 1;
-            fc2_ram_raddr = fc2_chunk_cnt;
+            // As in case 10: addresses in one instruction, mult_ce in the next.
+            mult_clear = 0, param_en = 1, fc2_ram_raddr = fc2_chunk_cnt,
             // weight_addr = {neuron_cnt[2:0], chunk_cnt[1:0]}  (6 bits)
-            fc2_weight_raddr = (fc2_neuron_cnt << 2) + fc2_chunk_cnt;
+            fc2_weight_raddr = (fc2_neuron_cnt << 2) + fc2_chunk_cnt,
             fc2_bias_raddr = fc2_neuron_cnt;
             mult_ce = 1;
             if (fc2_chunk_cnt == 3) {
-                fc2_chunk_cnt = 0;
-                layer_phase = 16;
+                fc2_chunk_cnt = 0, layer_phase = 16;
             } else {
                 fc2_chunk_cnt = fc2_chunk_cnt + 1;
             }
