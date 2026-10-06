@@ -4,10 +4,12 @@
 // exactly -- the pins that example verified end to end on this board -- the
 // same way tm_tang9k_uart.cst was derived from its 9K counterpart.
 //
-// NOTE rst_n: pin 19 follows webserver_tang20k.cst, but boards/tang_nano_20k.json
-// (cited to the schematic) says KEY_S1 is pin 88 and lists 19 as an LED pin.
-// Kept consistent with the working example rather than "fixed" here; the design
-// only needs rst_n to idle high. See that example's README.
+// NOTE rst_n: pin 19 follows webserver_tang20k.cst, but Sipeed's schematic
+// (Tang_Nano_20K_3923_Schematics.pdf rev 1.3) has pin 19 as LED4 and the S1
+// button on pin 88. Kept consistent with the working example rather than
+// "fixed" here: the design only needs rst_n to idle high, which the pull-up
+// on 19 gives it. Moving rst_n to 88 is not a drop-in fix: S1 is active-high
+// with no pull-up, so it would need PULL_MODE=DOWN and an inverted reset.
 
 // Clock (27 MHz on-board oscillator)
 IO_LOC "clk" 4;

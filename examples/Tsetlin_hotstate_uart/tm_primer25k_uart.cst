@@ -1,7 +1,7 @@
 // tm_primer25k_uart.cst — Sipeed Tang Primer 25K (Gowin GW5A-25)
 //
-// Pins from the vendored dock schematic (boards/Tang/Primer-25K/
-// Tang_25K_60033.pdf) and boards/tang_primer_25k.json, hardware-verified
+// Pins from Sipeed's Tang Primer 25K dock schematic (Tang_25K_60033.pdf),
+// hardware-verified
 // 2026-09-09 during the examples/webserver port to this board:
 //   E2  50 MHz oscillator      B3  FPGA_UART_RX      C3  FPGA_UART_TX
 //   H11 user button S1 (rst_n)
